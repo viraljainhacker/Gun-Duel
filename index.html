@@ -2,757 +2,988 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Gun Duel — 2 Player</title>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+      maximum-scale=1.0, user-scalable=no">
+
+<title>Gun Duel - 2 Player</title>
 
 <style>
 
+/* =====================================================
+   BASIC
+===================================================== */
+
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html,
 body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
 }
 
 body {
-  background: #1a1a2e;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: Arial, sans-serif;
-  color: #eee;
-  padding: 16px;
-  overflow-x: hidden;
+    background: #1a1a2e;
+    color: #eee;
+    font-family: Arial, sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 15px;
+
+    overflow-x: hidden;
 }
 
-/* =========================
+
+/* =====================================================
    TITLE
-========================= */
+===================================================== */
 
 h1 {
-  margin: 8px 0;
-  letter-spacing: 2px;
-  text-align: center;
+    margin: 5px 0 12px;
+    font-size: 28px;
+    letter-spacing: 2px;
+    text-align: center;
 }
 
-/* =========================
+
+/* =====================================================
    MODE SCREEN
-========================= */
+===================================================== */
 
 #modeScreen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 35px 15px;
 }
 
 #modeScreen p {
-  color: #aaa;
-  margin: 0;
+    color: #aaa;
+    margin: 0;
 }
 
 .modeBtn {
-  width: 260px;
-  padding: 16px;
-  font-size: 18px;
-  border-radius: 8px;
-  border: 2px solid #555;
-  background: #2b2b45;
-  color: #fff;
-  cursor: pointer;
+    width: 270px;
+
+    padding: 15px;
+
+    font-size: 18px;
+
+    border-radius: 10px;
+    border: 2px solid #555;
+
+    background: #2b2b45;
+    color: white;
+
+    cursor: pointer;
+
+    transition: 0.2s;
 }
 
 .modeBtn:hover {
-  background: #3a3a5c;
-  border-color: #888;
+    background: #3b3b60;
+    border-color: #888;
 }
 
-/* =========================
+.modeBtn:active {
+    transform: scale(0.97);
+}
+
+
+/* =====================================================
    GAME AREA
-========================= */
+===================================================== */
 
 #gameArea {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
+    display: none;
+
+    width: 100%;
+
+    flex-direction: column;
+    align-items: center;
 }
 
-/* =========================
-   HUD
-========================= */
+
+/* =====================================================
+   HEALTH / HUD
+===================================================== */
 
 #hud {
-  display: flex;
-  justify-content: space-between;
-  width: 900px;
-  max-width: 95vw;
-  margin-bottom: 6px;
+    width: 900px;
+    max-width: 95vw;
+
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 6px;
 }
 
 .healthbox {
-  width: 45%;
+    width: 45%;
 }
 
 .healthbox .name {
-  font-weight: bold;
-  margin-bottom: 4px;
+    font-weight: bold;
+    margin-bottom: 4px;
 }
 
 .bar-bg {
-  background: #333;
-  border-radius: 6px;
-  height: 22px;
-  overflow: hidden;
-  border: 2px solid #555;
+    width: 100%;
+    height: 22px;
+
+    background: #333;
+
+    border: 2px solid #555;
+    border-radius: 6px;
+
+    overflow: hidden;
 }
 
 .bar-fill {
-  height: 100%;
-  transition: width 0.15s;
+    height: 100%;
+
+    transition: width 0.15s;
 }
 
 #p1fill {
-  background: linear-gradient(90deg, #ff5252, #ff8a80);
+    background: linear-gradient(
+        90deg,
+        #ff5252,
+        #ff8a80
+    );
 }
 
 #p2fill {
-  background: linear-gradient(90deg, #448aff, #82b1ff);
+    background: linear-gradient(
+        90deg,
+        #448aff,
+        #82b1ff
+    );
 }
+
+
+/* =====================================================
+   SCORE
+===================================================== */
 
 #score {
-  font-size: 14px;
-  color: #aaa;
-  text-align: center;
-  margin-bottom: 4px;
+    color: #aaa;
+    font-size: 14px;
+
+    text-align: center;
+
+    margin-bottom: 5px;
 }
 
-/* =========================
+
+/* =====================================================
    GAME CANVAS
-========================= */
+===================================================== */
 
 .wrap {
-  position: relative;
+    position: relative;
+
+    width: 900px;
+    max-width: 95vw;
 }
 
 canvas {
-  background: #2b2b45;
-  border: 3px solid #555;
-  border-radius: 8px;
-  display: block;
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    background: #2b2b45;
+
+    border: 3px solid #555;
+    border-radius: 8px;
 }
 
-/* =========================
+
+/* =====================================================
    WIN MESSAGE
-========================= */
+===================================================== */
 
 #msg {
-  position: absolute;
-  top: 40%;
-  width: 100%;
-  text-align: center;
-  font-size: 40px;
-  font-weight: bold;
-  color: #fff;
-  text-shadow: 0 0 10px #000;
-  display: none;
+    position: absolute;
+
+    top: 40%;
+    left: 0;
+
+    width: 100%;
+
+    text-align: center;
+
+    font-size: 40px;
+    font-weight: bold;
+
+    color: white;
+
+    text-shadow: 0 0 10px black;
+
+    display: none;
+
+    pointer-events: none;
 }
 
-/* =========================
-   RESTART
-========================= */
+
+/* =====================================================
+   RESTART BUTTON
+===================================================== */
 
 #restartBtn {
-  margin-top: 10px;
-  padding: 8px 20px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: none;
-  background: #444;
-  color: #fff;
-  cursor: pointer;
-  display: none;
+    margin-top: 10px;
+
+    padding: 9px 22px;
+
+    font-size: 16px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #444;
+    color: white;
+
+    cursor: pointer;
+
+    display: none;
 }
 
 #restartBtn:hover {
-  background: #666;
+    background: #666;
 }
 
-/* =========================
-   DESKTOP INFO
-========================= */
+
+/* =====================================================
+   DESKTOP KEYBOARD INFO
+===================================================== */
 
 #info {
-  width: 900px;
-  max-width: 95vw;
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: #999;
-  margin-top: 8px;
+    width: 900px;
+    max-width: 95vw;
+
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 13px;
+
+    color: #999;
+
+    margin-top: 8px;
 }
 
-/* =========================================================
+
+/* =====================================================
    MOBILE CONTROLS
-   IMPORTANT:
-   DISPLAY NONE BY DEFAULT
-   SO LAPTOP/DESKTOP PAR MOBILE BUTTONS NAHI DIKHENGE
-========================================================= */
+   DEFAULT = COMPLETELY HIDDEN
+===================================================== */
 
 #mobileControls {
-  display: none;
-  width: 100%;
-  max-width: 900px;
-  margin-top: 10px;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: none;
+    display: none;
+
+    width: 100%;
+    max-width: 900px;
+
+    margin-top: 10px;
+
+    padding: 4px;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    touch-action: none;
 }
 
-/* Player control row */
+
+/* PLAYER CONTROL ROW */
 
 .mobilePlayerControls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 8px 4px;
+    width: 100%;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 8px 2px;
 }
 
-/* P2 hidden initially */
+
+/* PLAYER 2 DEFAULT HIDDEN */
 
 #p2Controls {
-  display: none;
+    display: none;
 }
 
-/* Control groups */
+
+/* CONTROL GROUP */
 
 .controlGroup {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
 }
 
-/* Buttons */
+
+/* =====================================================
+   MOBILE BUTTON
+===================================================== */
 
 .controlBtn {
-  width: 58px;
-  height: 58px;
+    width: 58px;
+    height: 58px;
 
-  border-radius: 15px;
-  border: 2px solid #666;
+    border-radius: 15px;
 
-  background: #252540;
-  color: white;
+    border: 2px solid #666;
 
-  font-size: 25px;
-  font-weight: bold;
+    background: #292945;
 
-  box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+    color: white;
 
-  touch-action: none;
-  -webkit-tap-highlight-color: transparent;
+    font-size: 25px;
+    font-weight: bold;
 
-  cursor: pointer;
+    cursor: pointer;
+
+    touch-action: none;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow:
+        0 4px 8px rgba(0,0,0,0.4);
+
+    transition:
+        transform 0.08s,
+        background 0.08s;
 }
 
-.controlBtn:active,
+
+/* BUTTON PRESSED */
+
 .controlBtn.pressed {
-  transform: scale(0.92);
-  background: #55557a;
+    transform: scale(0.90);
+
+    background: #5b5b80;
 }
 
-/* Jump */
+
+/* JUMP */
 
 .jumpBtn {
-  background: #205c8a;
-  border-color: #5ca9e6;
+    background: #17618f;
+
+    border-color: #55aee8;
 }
 
-/* Crouch */
+
+/* CROUCH */
 
 .crouchBtn {
-  background: #444;
+    background: #444;
 }
 
-/* Shoot */
+
+/* SHOOT */
 
 .shootBtn {
-  width: 72px;
-  height: 72px;
+    width: 72px;
+    height: 72px;
 
-  border-radius: 50%;
+    border-radius: 50%;
 
-  font-size: 30px;
+    font-size: 30px;
 
-  background: #7b2020;
-  border-color: #ff6666;
+    background: #8b2020;
 
-  box-shadow: 0 4px 12px rgba(255,0,0,0.25);
+    border-color: #ff6666;
+
+    box-shadow:
+        0 4px 12px rgba(255,0,0,0.25);
 }
 
-.shootBtn:active,
 .shootBtn.pressed {
-  background: #b52d2d;
+    background: #c33131;
 }
 
-/* =========================================================
-   MOBILE ONLY
-========================================================= */
 
-@media (max-width: 700px) {
+/* =====================================================
+   MOBILE DEVICE CLASS
+===================================================== */
 
-  body {
+body.mobile-device {
     padding: 6px;
-  }
+}
 
-  h1 {
+body.mobile-device h1 {
     font-size: 23px;
     margin: 4px 0 7px;
-  }
-
-  #modeScreen {
-    padding: 25px 10px;
-  }
-
-  .modeBtn {
-    width: 260px;
-    max-width: 90vw;
-  }
-
-  #hud {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .healthbox {
-    width: 47%;
-  }
-
-  .healthbox .name {
-    font-size: 13px;
-  }
-
-  .bar-bg {
-    height: 18px;
-  }
-
-  #score {
-    font-size: 12px;
-  }
-
-  /* Canvas responsive */
-
-  canvas {
-    width: 100%;
-    height: auto;
-    max-width: 100%;
-  }
-
-  /* Hide keyboard information */
-
-  #info {
-    display: none;
-  }
-
-  /* Show mobile controls */
-
-  #mobileControls {
-    display: block;
-  }
-
-  /* Player 1 visible */
-
-  #p1Controls {
-    display: flex;
-  }
-
-  /* P2 hidden in bot mode */
-
-  body.twoPlayerMode #p2Controls {
-    display: flex;
-  }
-
-  /* Separate P1/P2 */
-
-  body.twoPlayerMode #p1Controls {
-    border-bottom: 1px solid #444;
-    padding-bottom: 10px;
-  }
-
-  body.twoPlayerMode #p2Controls {
-    padding-top: 10px;
-  }
-
-  #msg {
-    font-size: 28px;
-  }
-
-  #restartBtn {
-    font-size: 15px;
-    padding: 9px 18px;
-  }
-
-  .controlBtn {
-    width: 54px;
-    height: 54px;
-  }
-
-  .shootBtn {
-    width: 68px;
-    height: 68px;
-  }
 }
 
-/* Very small phones */
+body.mobile-device #mobileControls {
+    display: block;
+}
 
-@media (max-width: 380px) {
+body.mobile-device #info {
+    display: none;
+}
 
-  .controlGroup {
-    gap: 5px;
-  }
+body.mobile-device .wrap {
+    width: 100%;
+    max-width: 100%;
+}
 
-  .controlBtn {
-    width: 48px;
-    height: 48px;
-    font-size: 21px;
-  }
+body.mobile-device canvas {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
 
-  .shootBtn {
-    width: 60px;
-    height: 60px;
-    font-size: 26px;
-  }
+body.mobile-device #hud {
+    width: 100%;
+    max-width: 100%;
+}
+
+body.mobile-device .healthbox {
+    width: 47%;
+}
+
+body.mobile-device .bar-bg {
+    height: 18px;
+}
+
+body.mobile-device .healthbox .name {
+    font-size: 13px;
+}
+
+body.mobile-device #score {
+    font-size: 12px;
+}
+
+body.mobile-device #msg {
+    font-size: 28px;
+}
+
+
+/* =====================================================
+   TWO PLAYER MOBILE
+===================================================== */
+
+body.mobile-device.twoPlayerMode #p2Controls {
+    display: flex;
+}
+
+body.mobile-device.twoPlayerMode #p1Controls {
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+}
+
+body.mobile-device.twoPlayerMode #p2Controls {
+    padding-top: 10px;
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 400px) {
+
+    body.mobile-device .controlGroup {
+        gap: 5px;
+    }
+
+    body.mobile-device .controlBtn {
+        width: 50px;
+        height: 50px;
+
+        font-size: 21px;
+    }
+
+    body.mobile-device .shootBtn {
+        width: 64px;
+        height: 64px;
+
+        font-size: 27px;
+    }
+}
+
+
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
+
+@media (max-width: 330px) {
+
+    body.mobile-device .controlBtn {
+        width: 45px;
+        height: 45px;
+
+        font-size: 19px;
+    }
+
+    body.mobile-device .shootBtn {
+        width: 58px;
+        height: 58px;
+
+        font-size: 24px;
+    }
 }
 
 </style>
 </head>
 
+
 <body>
+
+
+<!-- =====================================================
+     TITLE
+===================================================== -->
 
 <h1>🔫 GUN DUEL 🔫</h1>
 
-<!-- =========================
+
+<!-- =====================================================
      MODE SCREEN
-========================= -->
+===================================================== -->
 
 <div id="modeScreen">
 
-  <p>Choose a mode</p>
+    <p>Choose a mode</p>
 
-  <button class="modeBtn" id="botModeBtn">
-    1 Player — vs Bot
-  </button>
+    <button
+        class="modeBtn"
+        id="botModeBtn">
 
-  <button class="modeBtn" id="pvpModeBtn">
-    2 Players — vs Friend
-  </button>
+        1 Player — vs Bot
+
+    </button>
+
+
+    <button
+        class="modeBtn"
+        id="pvpModeBtn">
+
+        2 Players — vs Friend
+
+    </button>
 
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      GAME AREA
-========================= -->
+===================================================== -->
 
 <div id="gameArea">
 
-  <!-- HUD -->
 
-  <div id="hud">
+    <!-- =================================================
+         HUD
+    ================================================== -->
 
-    <div class="healthbox">
+    <div id="hud">
 
-      <div
-        class="name"
-        style="color:#ff5252">
-        Player 1
-      </div>
+        <div class="healthbox">
 
-      <div class="bar-bg">
-        <div
-          class="bar-fill"
-          id="p1fill"
-          style="width:100%">
+            <div
+                class="name"
+                style="color:#ff5252">
+
+                Player 1
+
+            </div>
+
+            <div class="bar-bg">
+
+                <div
+                    class="bar-fill"
+                    id="p1fill"
+                    style="width:100%">
+                </div>
+
+            </div>
+
         </div>
-      </div>
-
-    </div>
 
 
-    <div
-      class="healthbox"
-      style="text-align:right">
-
-      <div
-        class="name"
-        style="color:#448aff">
-        Player 2
-      </div>
-
-      <div class="bar-bg">
         <div
-          class="bar-fill"
-          id="p2fill"
-          style="width:100%">
+            class="healthbox"
+            style="text-align:right">
+
+            <div
+                class="name"
+                style="color:#448aff">
+
+                Player 2
+
+            </div>
+
+            <div class="bar-bg">
+
+                <div
+                    class="bar-fill"
+                    id="p2fill"
+                    style="width:100%">
+                </div>
+
+            </div>
+
         </div>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- SCORE -->
-
-  <div id="score">
-
-    Score —
-    Player 1:
-    <span id="s1">0</span>
-
-    &nbsp;|&nbsp;
-
-    Player 2:
-    <span id="s2">0</span>
-
-  </div>
-
-
-  <!-- GAME -->
-
-  <div class="wrap">
-
-    <canvas
-      id="game"
-      width="900"
-      height="450">
-    </canvas>
-
-    <div id="msg"></div>
-
-  </div>
-
-
-  <!-- RESTART -->
-
-  <button id="restartBtn">
-    Restart Round
-  </button>
-
-
-  <!-- DESKTOP CONTROLS INFO -->
-
-  <div id="info">
-
-    <div>
-      <b>Player 1:</b>
-      A/D move, W jump, S crouch, SPACE shoot
-    </div>
-
-    <div id="p2info">
-      <b>Player 2:</b>
-      ←/→ move, ↑ jump, ↓ crouch, ENTER shoot
-    </div>
-
-  </div>
-
-
-  <!-- =====================================================
-       MOBILE TOUCH CONTROLS
-  ====================================================== -->
-
-  <div id="mobileControls">
-
-    <!-- PLAYER 1 -->
-
-    <div
-      class="mobilePlayerControls"
-      id="p1Controls">
-
-      <!-- MOVE -->
-
-      <div class="controlGroup">
-
-        <button
-          class="controlBtn"
-          data-key="KeyA">
-          ◀
-        </button>
-
-        <button
-          class="controlBtn"
-          data-key="KeyD">
-          ▶
-        </button>
-
-      </div>
-
-
-      <!-- ACTIONS -->
-
-      <div class="controlGroup">
-
-        <button
-          class="controlBtn jumpBtn"
-          data-key="KeyW">
-          🔼
-        </button>
-
-        <button
-          class="controlBtn crouchBtn"
-          data-key="KeyS">
-          🔽
-        </button>
-
-        <button
-          class="controlBtn shootBtn"
-          data-key="Space">
-          🔫
-        </button>
-
-      </div>
 
     </div>
 
 
-    <!-- PLAYER 2 -->
+    <!-- =================================================
+         SCORE
+    ================================================== -->
 
-    <div
-      class="mobilePlayerControls"
-      id="p2Controls">
+    <div id="score">
 
-      <!-- MOVE -->
+        Score —
+        Player 1:
+        <span id="s1">0</span>
 
-      <div class="controlGroup">
+        &nbsp; | &nbsp;
 
-        <button
-          class="controlBtn"
-          data-key="ArrowLeft">
-          ◀
-        </button>
-
-        <button
-          class="controlBtn"
-          data-key="ArrowRight">
-          ▶
-        </button>
-
-      </div>
-
-
-      <!-- ACTIONS -->
-
-      <div class="controlGroup">
-
-        <button
-          class="controlBtn jumpBtn"
-          data-key="ArrowUp">
-          🔼
-        </button>
-
-        <button
-          class="controlBtn crouchBtn"
-          data-key="ArrowDown">
-          🔽
-        </button>
-
-        <button
-          class="controlBtn shootBtn"
-          data-key="Enter">
-          🔫
-        </button>
-
-      </div>
+        Player 2:
+        <span id="s2">0</span>
 
     </div>
 
-  </div>
+
+    <!-- =================================================
+         GAME CANVAS
+    ================================================== -->
+
+    <div class="wrap">
+
+        <canvas
+            id="game"
+            width="900"
+            height="450">
+        </canvas>
+
+        <div id="msg"></div>
+
+    </div>
+
+
+    <!-- =================================================
+         RESTART
+    ================================================== -->
+
+    <button id="restartBtn">
+        Restart Round
+    </button>
+
+
+    <!-- =================================================
+         DESKTOP CONTROLS
+    ================================================== -->
+
+    <div id="info">
+
+        <div>
+
+            <b>Player 1:</b>
+
+            A/D Move,
+            W Jump,
+            S Crouch,
+            SPACE Shoot
+
+        </div>
+
+
+        <div id="p2info">
+
+            <b>Player 2:</b>
+
+            ←/→ Move,
+            ↑ Jump,
+            ↓ Crouch,
+            ENTER Shoot
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         MOBILE TOUCH CONTROLS
+    ================================================== -->
+
+    <div id="mobileControls">
+
+
+        <!-- =============================================
+             PLAYER 1 CONTROLS
+        ============================================== -->
+
+        <div
+            class="mobilePlayerControls"
+            id="p1Controls">
+
+
+            <!-- MOVE -->
+
+            <div class="controlGroup">
+
+                <button
+                    class="controlBtn"
+                    data-key="KeyA">
+
+                    ◀
+
+                </button>
+
+
+                <button
+                    class="controlBtn"
+                    data-key="KeyD">
+
+                    ▶
+
+                </button>
+
+            </div>
+
+
+            <!-- ACTION -->
+
+            <div class="controlGroup">
+
+                <button
+                    class="controlBtn jumpBtn"
+                    data-key="KeyW">
+
+                    🔼
+
+                </button>
+
+
+                <button
+                    class="controlBtn crouchBtn"
+                    data-key="KeyS">
+
+                    🔽
+
+                </button>
+
+
+                <button
+                    class="controlBtn shootBtn"
+                    data-key="Space">
+
+                    🔫
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =============================================
+             PLAYER 2 CONTROLS
+        ============================================== -->
+
+        <div
+            class="mobilePlayerControls"
+            id="p2Controls">
+
+
+            <!-- MOVE -->
+
+            <div class="controlGroup">
+
+                <button
+                    class="controlBtn"
+                    data-key="ArrowLeft">
+
+                    ◀
+
+                </button>
+
+
+                <button
+                    class="controlBtn"
+                    data-key="ArrowRight">
+
+                    ▶
+
+                </button>
+
+            </div>
+
+
+            <!-- ACTION -->
+
+            <div class="controlGroup">
+
+                <button
+                    class="controlBtn jumpBtn"
+                    data-key="ArrowUp">
+
+                    🔼
+
+                </button>
+
+
+                <button
+                    class="controlBtn crouchBtn"
+                    data-key="ArrowDown">
+
+                    🔽
+
+                </button>
+
+
+                <button
+                    class="controlBtn shootBtn"
+                    data-key="Enter">
+
+                    🔫
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
 
 <script>
 
-/* =========================================================
-   CANVAS
-========================================================= */
 
-const canvas = document.getElementById('game');
+/* =====================================================
+   MOBILE DEVICE DETECTION
+   Android / iPhone / iPad ONLY
+   Laptop buttons will stay hidden
+===================================================== */
 
-const ctx = canvas.getContext('2d');
+const mobileDevice =
+    /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i
+    .test(navigator.userAgent);
 
-const W = canvas.width;
-const H = canvas.height;
+if (mobileDevice) {
 
-const GROUND_Y = H - 50;
-
-const GRAVITY = 0.6;
-
-
-/* =========================================================
-   PLAYER
-========================================================= */
-
-function makePlayer(x, color, facing) {
-
-  return {
-
-    x: x,
-
-    y: GROUND_Y - 60,
-
-    w: 30,
-
-    h: 60,
-
-    vx: 0,
-
-    vy: 0,
-
-    color: color,
-
-    facing: facing,
-
-    health: 100,
-
-    onGround: true,
-
-    crouch: false,
-
-    cooldown: 0,
-
-    hitFlash: 0,
-
-    score: 0
-
-  };
+    document.body.classList.add(
+        "mobile-device"
+    );
 
 }
 
 
-/* =========================================================
+/* =====================================================
+   CANVAS
+===================================================== */
+
+const canvas =
+    document.getElementById("game");
+
+const ctx =
+    canvas.getContext("2d");
+
+const W =
+    canvas.width;
+
+const H =
+    canvas.height;
+
+const GROUND_Y =
+    H - 50;
+
+const GRAVITY =
+    0.6;
+
+
+/* =====================================================
+   PLAYER CREATION
+===================================================== */
+
+function makePlayer(
+    x,
+    color,
+    facing
+) {
+
+    return {
+
+        x: x,
+
+        y: GROUND_Y - 60,
+
+        w: 30,
+
+        h: 60,
+
+        vx: 0,
+
+        vy: 0,
+
+        color: color,
+
+        facing: facing,
+
+        health: 100,
+
+        onGround: true,
+
+        crouch: false,
+
+        cooldown: 0,
+
+        hitFlash: 0,
+
+        score: 0
+
+    };
+
+}
+
+
+/* =====================================================
    GAME VARIABLES
-========================================================= */
+===================================================== */
 
-let p1 = makePlayer(
-  150,
-  '#ff5252',
-  1
-);
+let p1 =
+    makePlayer(
+        150,
+        "#ff5252",
+        1
+    );
 
-let p2 = makePlayer(
-  720,
-  '#448aff',
-  -1
-);
+let p2 =
+    makePlayer(
+        720,
+        "#448aff",
+        -1
+    );
 
 let bullets = [];
 
@@ -765,1048 +996,1133 @@ let botMode = false;
 let started = false;
 
 
-/* =========================================================
+/* =====================================================
    MODE BUTTONS
-========================================================= */
+===================================================== */
 
 document
-  .getElementById('botModeBtn')
-  .onclick = () => startGame(true);
+    .getElementById("botModeBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            startGame(true);
+
+        }
+    );
+
 
 document
-  .getElementById('pvpModeBtn')
-  .onclick = () => startGame(false);
+    .getElementById("pvpModeBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            startGame(false);
+
+        }
+    );
 
 
-/* =========================================================
+/* =====================================================
    START GAME
-========================================================= */
+===================================================== */
 
 function startGame(isBot) {
 
-  botMode = isBot;
-
-  document
-    .getElementById('modeScreen')
-    .style.display = 'none';
-
-  document
-    .getElementById('gameArea')
-    .style.display = 'flex';
-
-
-  if (botMode) {
-
-    document.body
-      .classList.remove('twoPlayerMode');
+    botMode = isBot;
 
     document
-      .getElementById('p2info')
-      .innerHTML =
-      '<b>Player 2:</b> Bot (CPU controlled)';
+        .getElementById("modeScreen")
+        .style.display = "none";
 
-  }
-
-  else {
-
-    document.body
-      .classList.add('twoPlayerMode');
 
     document
-      .getElementById('p2info')
-      .innerHTML =
-      '<b>Player 2:</b> ←/→ move, ↑ jump, ↓ crouch, ENTER shoot';
-
-  }
+        .getElementById("gameArea")
+        .style.display = "flex";
 
 
-  if (!started) {
+    if (botMode) {
 
-    started = true;
+        document.body
+            .classList.remove(
+                "twoPlayerMode"
+            );
 
-    update();
 
-  }
+        document
+            .getElementById("p2info")
+            .innerHTML =
+            "<b>Player 2:</b> Bot (CPU controlled)";
+
+    }
+
+    else {
+
+        document.body
+            .classList.add(
+                "twoPlayerMode"
+            );
+
+
+        document
+            .getElementById("p2info")
+            .innerHTML =
+            "<b>Player 2:</b> ←/→ Move, ↑ Jump, ↓ Crouch, ENTER Shoot";
+
+    }
+
+
+    if (!started) {
+
+        started = true;
+
+        update();
+
+    }
 
 }
 
 
-/* =========================================================
+/* =====================================================
    BOT AI
-========================================================= */
+===================================================== */
 
 let botState = {
 
-  decisionTimer: 0,
+    decisionTimer: 0,
 
-  moveDir: 0,
+    moveDir: 0,
 
-  wantJump: false,
+    wantJump: false,
 
-  wantCrouch: false
+    wantCrouch: false
 
 };
 
 
 function updateBotAI() {
 
-  botState.decisionTimer--;
+    botState.decisionTimer--;
 
-  const dist = p1.x - p2.x;
+    const dist =
+        p1.x - p2.x;
 
-  const absDist = Math.abs(dist);
-
-
-  if (botState.decisionTimer <= 0) {
-
-    botState.decisionTimer =
-      20 + Math.floor(Math.random() * 20);
-
-
-    if (absDist > 350) {
-
-      botState.moveDir =
-        dist > 0 ? 1 : -1;
-
-    }
-
-    else if (absDist < 150) {
-
-      botState.moveDir =
-        dist > 0 ? -1 : 1;
-
-    }
-
-    else {
-
-      botState.moveDir =
-        Math.random() < 0.3
-        ? (Math.random() < 0.5 ? 1 : -1)
-        : 0;
-
-    }
-
-
-    botState.wantJump =
-      Math.random() < 0.15 &&
-      p2.onGround;
-
-
-    botState.wantCrouch =
-      Math.random() < 0.3;
-
-  }
-
-
-  p2.vx = 0;
-
-
-  if (botState.moveDir === -1) {
-
-    p2.vx = -4;
-
-    p2.facing = -1;
-
-  }
-
-
-  if (botState.moveDir === 1) {
-
-    p2.vx = 4;
-
-    p2.facing = 1;
-
-  }
-
-
-  p2.facing =
-    dist > 0 ? 1 : -1;
-
-
-  if (
-    botState.wantJump &&
-    p2.onGround
-  ) {
-
-    p2.vy = -12;
-
-    p2.onGround = false;
-
-    botState.wantJump = false;
-
-  }
-
-
-  p2.crouch =
-    botState.wantCrouch &&
-    p2.onGround;
-
-
-  /* BOT SHOOT */
-
-  if (
-    p2.cooldown === 0 &&
-    Math.random() < 0.06
-  ) {
-
-    shoot(p2, p1);
-
-  }
-
-}
-
-
-/* =========================================================
-   KEYBOARD CONTROLS
-========================================================= */
-
-document.addEventListener(
-  'keydown',
-  function(e) {
-
-    keys[e.code] = true;
-
-    if (
-      [
-        'Space',
-        'ArrowUp',
-        'ArrowDown',
-        'ArrowLeft',
-        'ArrowRight'
-      ].includes(e.code)
-    ) {
-
-      e.preventDefault();
-
-    }
-
-  }
-);
-
-
-document.addEventListener(
-  'keyup',
-  function(e) {
-
-    keys[e.code] = false;
-
-  }
-);
-
-
-/* =========================================================
-   SHOOT
-========================================================= */
-
-function shoot(p, other) {
-
-  if (
-    p.cooldown > 0 ||
-    roundOver
-  ) {
-
-    return;
-
-  }
-
-
-  p.cooldown = 18;
-
-
-  bullets.push({
-
-    x:
-      p.x +
-      (
-        p.facing === 1
-        ? p.w
-        : 0
-      ),
-
-    y:
-      p.y +
-      (
-        p.crouch
-        ? p.h * 0.7
-        : p.h * 0.3
-      ),
-
-    vx:
-      11 * p.facing,
-
-    owner: p
-
-  });
-
-}
-
-
-/* =========================================================
-   GAME UPDATE
-========================================================= */
-
-function update() {
-
-  if (!roundOver) {
-
-
-    /* PLAYER 1 */
-
-    p1.vx = 0;
-
-
-    if (keys['KeyA']) {
-
-      p1.vx = -4;
-
-      p1.facing = -1;
-
-    }
-
-
-    if (keys['KeyD']) {
-
-      p1.vx = 4;
-
-      p1.facing = 1;
-
-    }
+    const absDist =
+        Math.abs(dist);
 
 
     if (
-      keys['KeyW'] &&
-      p1.onGround
+        botState.decisionTimer <= 0
     ) {
 
-      p1.vy = -12;
+        botState.decisionTimer =
+            20 +
+            Math.floor(
+                Math.random() * 20
+            );
 
-      p1.onGround = false;
+
+        if (absDist > 350) {
+
+            botState.moveDir =
+                dist > 0
+                    ? 1
+                    : -1;
+
+        }
+
+        else if (absDist < 150) {
+
+            botState.moveDir =
+                dist > 0
+                    ? -1
+                    : 1;
+
+        }
+
+        else {
+
+            botState.moveDir =
+                Math.random() < 0.3
+                    ? (
+                        Math.random() < 0.5
+                            ? 1
+                            : -1
+                    )
+                    : 0;
+
+        }
+
+
+        botState.wantJump =
+            Math.random() < 0.15 &&
+            p2.onGround;
+
+
+        botState.wantCrouch =
+            Math.random() < 0.3;
 
     }
 
 
-    p1.crouch =
-      !!keys['KeyS'] &&
-      p1.onGround;
+    p2.vx = 0;
 
 
-    if (keys['Space']) {
-
-      shoot(p1, p2);
-
-    }
-
-
-    /* PLAYER 2 */
-
-    if (botMode) {
-
-      updateBotAI();
-
-    }
-
-    else {
-
-      p2.vx = 0;
-
-
-      if (keys['ArrowLeft']) {
+    if (
+        botState.moveDir === -1
+    ) {
 
         p2.vx = -4;
 
         p2.facing = -1;
 
-      }
+    }
 
 
-      if (keys['ArrowRight']) {
+    if (
+        botState.moveDir === 1
+    ) {
 
         p2.vx = 4;
 
         p2.facing = 1;
 
-      }
+    }
 
 
-      if (
-        keys['ArrowUp'] &&
+    p2.facing =
+        dist > 0
+            ? 1
+            : -1;
+
+
+    if (
+        botState.wantJump &&
         p2.onGround
-      ) {
+    ) {
 
         p2.vy = -12;
 
         p2.onGround = false;
 
-      }
-
-
-      p2.crouch =
-        !!keys['ArrowDown'] &&
-        p2.onGround;
-
-
-      if (keys['Enter']) {
-
-        shoot(p2, p1);
-
-      }
+        botState.wantJump = false;
 
     }
 
 
-    /* PHYSICS */
+    p2.crouch =
+        botState.wantCrouch &&
+        p2.onGround;
 
-    [p1, p2].forEach(
-      function(p) {
 
-        p.x += p.vx;
+    if (
+        p2.cooldown === 0 &&
+        Math.random() < 0.06
+    ) {
 
-        p.vy += GRAVITY;
+        shoot(p2);
 
-        p.y += p.vy;
+    }
+
+}
+
+
+/* =====================================================
+   KEYBOARD
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(e) {
+
+        keys[e.code] = true;
 
 
         if (
-          p.y + p.h >= GROUND_Y
+            [
+                "Space",
+                "ArrowUp",
+                "ArrowDown",
+                "ArrowLeft",
+                "ArrowRight"
+            ].includes(e.code)
         ) {
 
-          p.y =
-            GROUND_Y - p.h;
+            e.preventDefault();
 
-          p.vy = 0;
+        }
 
-          p.onGround = true;
+    }
+);
+
+
+document.addEventListener(
+    "keyup",
+    function(e) {
+
+        keys[e.code] = false;
+
+    }
+);
+
+
+/* =====================================================
+   SHOOT
+===================================================== */
+
+function shoot(p) {
+
+    if (
+        p.cooldown > 0 ||
+        roundOver
+    ) {
+
+        return;
+
+    }
+
+
+    p.cooldown = 18;
+
+
+    bullets.push({
+
+        x:
+            p.x +
+            (
+                p.facing === 1
+                    ? p.w
+                    : 0
+            ),
+
+        y:
+            p.y +
+            (
+                p.crouch
+                    ? p.h * 0.7
+                    : p.h * 0.3
+            ),
+
+        vx:
+            11 * p.facing,
+
+        owner:
+            p
+
+    });
+
+}
+
+
+/* =====================================================
+   UPDATE GAME
+===================================================== */
+
+function update() {
+
+    if (!roundOver) {
+
+
+        /* =============================================
+           PLAYER 1
+        ============================================== */
+
+        p1.vx = 0;
+
+
+        if (keys["KeyA"]) {
+
+            p1.vx = -4;
+
+            p1.facing = -1;
 
         }
 
 
-        p.x =
-          Math.max(
-            0,
-            Math.min(
-              W - p.w,
-              p.x
-            )
-          );
+        if (keys["KeyD"]) {
 
+            p1.vx = 4;
 
-        if (p.cooldown > 0) {
-
-          p.cooldown--;
+            p1.facing = 1;
 
         }
 
 
-        if (p.hitFlash > 0) {
+        if (
+            keys["KeyW"] &&
+            p1.onGround
+        ) {
 
-          p.hitFlash--;
+            p1.vy = -12;
+
+            p1.onGround = false;
 
         }
 
-      }
+
+        p1.crouch =
+            !!keys["KeyS"] &&
+            p1.onGround;
+
+
+        if (keys["Space"]) {
+
+            shoot(p1);
+
+        }
+
+
+        /* =============================================
+           PLAYER 2
+        ============================================== */
+
+        if (botMode) {
+
+            updateBotAI();
+
+        }
+
+        else {
+
+            p2.vx = 0;
+
+
+            if (keys["ArrowLeft"]) {
+
+                p2.vx = -4;
+
+                p2.facing = -1;
+
+            }
+
+
+            if (keys["ArrowRight"]) {
+
+                p2.vx = 4;
+
+                p2.facing = 1;
+
+            }
+
+
+            if (
+                keys["ArrowUp"] &&
+                p2.onGround
+            ) {
+
+                p2.vy = -12;
+
+                p2.onGround = false;
+
+            }
+
+
+            p2.crouch =
+                !!keys["ArrowDown"] &&
+                p2.onGround;
+
+
+            if (keys["Enter"]) {
+
+                shoot(p2);
+
+            }
+
+        }
+
+
+        /* =============================================
+           PHYSICS
+        ============================================== */
+
+        [p1, p2].forEach(
+            function(p) {
+
+                p.x += p.vx;
+
+                p.vy += GRAVITY;
+
+                p.y += p.vy;
+
+
+                if (
+                    p.y + p.h >=
+                    GROUND_Y
+                ) {
+
+                    p.y =
+                        GROUND_Y - p.h;
+
+                    p.vy = 0;
+
+                    p.onGround = true;
+
+                }
+
+
+                p.x =
+                    Math.max(
+                        0,
+                        Math.min(
+                            W - p.w,
+                            p.x
+                        )
+                    );
+
+
+                if (
+                    p.cooldown > 0
+                ) {
+
+                    p.cooldown--;
+
+                }
+
+
+                if (
+                    p.hitFlash > 0
+                ) {
+
+                    p.hitFlash--;
+
+                }
+
+            }
+        );
+
+
+        /* =============================================
+           PREVENT PLAYER OVERLAP
+        ============================================== */
+
+        if (p1.x < p2.x) {
+
+            if (
+                p1.x + p1.w >
+                p2.x
+            ) {
+
+                p1.x =
+                    p2.x - p1.w;
+
+            }
+
+        }
+
+        else {
+
+            if (
+                p2.x + p2.w >
+                p1.x
+            ) {
+
+                p2.x =
+                    p1.x - p2.w;
+
+            }
+
+        }
+
+
+        /* =============================================
+           BULLETS
+        ============================================== */
+
+        bullets.forEach(
+            function(b) {
+
+                b.x += b.vx;
+
+            }
+        );
+
+
+        bullets =
+            bullets.filter(
+                function(b) {
+
+
+                    if (
+                        b.x < 0 ||
+                        b.x > W
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    const target =
+                        b.owner === p1
+                            ? p2
+                            : p1;
+
+
+                    const targetHeight =
+                        target.crouch
+                            ? target.h * 0.6
+                            : target.h;
+
+
+                    const targetY =
+                        target.crouch
+                            ? target.y +
+                              target.h * 0.4
+                            : target.y;
+
+
+                    if (
+                        b.x > target.x &&
+                        b.x <
+                        target.x + target.w &&
+
+                        b.y > targetY &&
+
+                        b.y <
+                        targetY + targetHeight
+                    ) {
+
+                        target.health -= 12;
+
+                        target.hitFlash = 8;
+
+
+                        if (
+                            target.health <= 0
+                        ) {
+
+                            target.health = 0;
+
+                            endRound(
+                                b.owner
+                            );
+
+                        }
+
+
+                        return false;
+
+                    }
+
+
+                    return true;
+
+                }
+            );
+
+
+        updateHUD();
+
+    }
+
+
+    draw();
+
+    requestAnimationFrame(update);
+
+}
+
+
+/* =====================================================
+   HUD
+===================================================== */
+
+function updateHUD() {
+
+    document
+        .getElementById("p1fill")
+        .style.width =
+        p1.health + "%";
+
+
+    document
+        .getElementById("p2fill")
+        .style.width =
+        p2.health + "%";
+
+}
+
+
+/* =====================================================
+   END ROUND
+===================================================== */
+
+function endRound(winner) {
+
+    roundOver = true;
+
+    winner.score++;
+
+
+    document
+        .getElementById(
+            winner === p1
+                ? "s1"
+                : "s2"
+        )
+        .textContent =
+        winner.score;
+
+
+    const msg =
+        document.getElementById(
+            "msg"
+        );
+
+
+    msg.style.display = "block";
+
+    msg.style.color =
+        winner.color;
+
+
+    msg.textContent =
+        (
+            winner === p1
+                ? "PLAYER 1"
+                : "PLAYER 2"
+        ) +
+        " WINS!";
+
+
+    document
+        .getElementById(
+            "restartBtn"
+        )
+        .style.display =
+        "inline-block";
+
+}
+
+
+/* =====================================================
+   DRAW PLAYER
+===================================================== */
+
+function drawPlayer(p) {
+
+    ctx.save();
+
+
+    if (p.hitFlash > 0) {
+
+        ctx.globalAlpha = 0.5;
+
+    }
+
+
+    const bodyH =
+        p.crouch
+            ? p.h * 0.6
+            : p.h;
+
+
+    const bodyY =
+        p.crouch
+            ? p.y + p.h * 0.4
+            : p.y;
+
+
+    /* BODY */
+
+    ctx.fillStyle =
+        p.color;
+
+    ctx.fillRect(
+        p.x,
+        bodyY,
+        p.w,
+        bodyH
     );
 
 
-    /* PREVENT OVERLAP */
+    /* HEAD */
 
-    if (p1.x < p2.x) {
+    ctx.beginPath();
 
-      if (
-        p1.x + p1.w > p2.x
-      ) {
+    ctx.arc(
+        p.x + p.w / 2,
+        bodyY - 8,
+        10,
+        0,
+        Math.PI * 2
+    );
 
-        p1.x =
-          p2.x - p1.w;
+    ctx.fill();
 
-      }
+
+    /* GUN */
+
+    ctx.fillStyle =
+        "#222";
+
+
+    const gunY =
+        bodyY +
+        bodyH * 0.35;
+
+
+    if (
+        p.facing === 1
+    ) {
+
+        ctx.fillRect(
+            p.x + p.w,
+            gunY,
+            18,
+            6
+        );
 
     }
 
     else {
 
-      if (
-        p2.x + p2.w > p1.x
-      ) {
-
-        p2.x =
-          p1.x - p2.w;
-
-      }
+        ctx.fillRect(
+            p.x - 18,
+            gunY,
+            18,
+            6
+        );
 
     }
+
+
+    ctx.restore();
+
+}
+
+
+/* =====================================================
+   DRAW GAME
+===================================================== */
+
+function draw() {
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    /* BACKGROUND */
+
+    const grad =
+        ctx.createLinearGradient(
+            0,
+            0,
+            0,
+            H
+        );
+
+
+    grad.addColorStop(
+        0,
+        "#2b2b45"
+    );
+
+
+    grad.addColorStop(
+        1,
+        "#3a3a5c"
+    );
+
+
+    ctx.fillStyle =
+        grad;
+
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    /* GROUND */
+
+    ctx.fillStyle =
+        "#444460";
+
+
+    ctx.fillRect(
+        0,
+        GROUND_Y,
+        W,
+        H - GROUND_Y
+    );
+
+
+    ctx.strokeStyle =
+        "#5a5a80";
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        GROUND_Y
+    );
+
+    ctx.lineTo(
+        W,
+        GROUND_Y
+    );
+
+    ctx.stroke();
+
+
+    /* PLAYERS */
+
+    drawPlayer(p1);
+
+    drawPlayer(p2);
 
 
     /* BULLETS */
 
     bullets.forEach(
-      function(b) {
-
-        b.x += b.vx;
-
-      }
-    );
-
-
-    bullets =
-      bullets.filter(
         function(b) {
 
-          if (
-            b.x < 0 ||
-            b.x > W
-          ) {
-
-            return false;
-
-          }
+            ctx.fillStyle =
+                "#ffd54f";
 
 
-          const target =
-            b.owner === p1
-            ? p2
-            : p1;
+            ctx.beginPath();
 
 
-          const th =
-            target.crouch
-            ? target.h * 0.6
-            : target.h;
+            ctx.arc(
+                b.x,
+                b.y,
+                4,
+                0,
+                Math.PI * 2
+            );
 
 
-          const ty =
-            target.crouch
-            ? target.y + target.h * 0.4
-            : target.y;
-
-
-          if (
-            b.x > target.x &&
-            b.x < target.x + target.w &&
-            b.y > ty &&
-            b.y < ty + th
-          ) {
-
-            target.health -= 12;
-
-            target.hitFlash = 8;
-
-
-            if (
-              target.health <= 0
-            ) {
-
-              target.health = 0;
-
-              endRound(b.owner);
-
-            }
-
-
-            return false;
-
-          }
-
-
-          return true;
+            ctx.fill();
 
         }
-      );
-
-
-    updateHUD();
-
-  }
-
-
-  draw();
-
-  requestAnimationFrame(update);
-
-}
-
-
-/* =========================================================
-   HUD
-========================================================= */
-
-function updateHUD() {
-
-  document
-    .getElementById('p1fill')
-    .style.width =
-    p1.health + '%';
-
-
-  document
-    .getElementById('p2fill')
-    .style.width =
-    p2.health + '%';
-
-}
-
-
-/* =========================================================
-   END ROUND
-========================================================= */
-
-function endRound(winner) {
-
-  roundOver = true;
-
-  winner.score++;
-
-
-  document
-    .getElementById(
-      winner === p1
-      ? 's1'
-      : 's2'
-    )
-    .textContent =
-    winner.score;
-
-
-  const msg =
-    document.getElementById('msg');
-
-
-  msg.style.display = 'block';
-
-  msg.style.color =
-    winner.color;
-
-
-  msg.textContent =
-    (
-      winner === p1
-      ? 'PLAYER 1'
-      : 'PLAYER 2'
-    ) +
-    ' WINS!';
-
-
-  document
-    .getElementById('restartBtn')
-    .style.display =
-    'inline-block';
-
-}
-
-
-/* =========================================================
-   DRAW PLAYER
-========================================================= */
-
-function drawPlayer(p) {
-
-  ctx.save();
-
-
-  if (p.hitFlash > 0) {
-
-    ctx.globalAlpha = 0.5;
-
-  }
-
-
-  const bodyH =
-    p.crouch
-    ? p.h * 0.6
-    : p.h;
-
-
-  const bodyY =
-    p.crouch
-    ? p.y + p.h * 0.4
-    : p.y;
-
-
-  /* BODY */
-
-  ctx.fillStyle = p.color;
-
-  ctx.fillRect(
-    p.x,
-    bodyY,
-    p.w,
-    bodyH
-  );
-
-
-  /* HEAD */
-
-  ctx.beginPath();
-
-  ctx.arc(
-    p.x + p.w / 2,
-    bodyY - 8,
-    10,
-    0,
-    Math.PI * 2
-  );
-
-  ctx.fill();
-
-
-  /* GUN */
-
-  ctx.fillStyle = '#222';
-
-
-  const gunY =
-    bodyY + bodyH * 0.35;
-
-
-  if (p.facing === 1) {
-
-    ctx.fillRect(
-      p.x + p.w,
-      gunY,
-      18,
-      6
     );
 
-  }
-
-  else {
-
-    ctx.fillRect(
-      p.x - 18,
-      gunY,
-      18,
-      6
-    );
-
-  }
-
-
-  ctx.restore();
-
 }
 
 
-/* =========================================================
-   DRAW GAME
-========================================================= */
-
-function draw() {
-
-  ctx.clearRect(
-    0,
-    0,
-    W,
-    H
-  );
-
-
-  /* BACKGROUND */
-
-  const grad =
-    ctx.createLinearGradient(
-      0,
-      0,
-      0,
-      H
-    );
-
-
-  grad.addColorStop(
-    0,
-    '#2b2b45'
-  );
-
-
-  grad.addColorStop(
-    1,
-    '#3a3a5c'
-  );
-
-
-  ctx.fillStyle = grad;
-
-  ctx.fillRect(
-    0,
-    0,
-    W,
-    H
-  );
-
-
-  /* GROUND */
-
-  ctx.fillStyle =
-    '#444460';
-
-
-  ctx.fillRect(
-    0,
-    GROUND_Y,
-    W,
-    H - GROUND_Y
-  );
-
-
-  ctx.strokeStyle =
-    '#5a5a80';
-
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    0,
-    GROUND_Y
-  );
-
-  ctx.lineTo(
-    W,
-    GROUND_Y
-  );
-
-  ctx.stroke();
-
-
-  /* PLAYERS */
-
-  drawPlayer(p1);
-
-  drawPlayer(p2);
-
-
-  /* BULLETS */
-
-  bullets.forEach(
-    function(b) {
-
-      ctx.fillStyle =
-        '#ffd54f';
-
-
-      ctx.beginPath();
-
-
-      ctx.arc(
-        b.x,
-        b.y,
-        4,
-        0,
-        Math.PI * 2
-      );
-
-
-      ctx.fill();
-
-    }
-  );
-
-}
-
-
-/* =========================================================
+/* =====================================================
    RESTART
-========================================================= */
+===================================================== */
 
 document
-  .getElementById('restartBtn')
-  .onclick = function() {
+    .getElementById(
+        "restartBtn"
+    )
+    .addEventListener(
+        "click",
+        function() {
 
-    const s1 = p1.score;
+            const score1 =
+                p1.score;
 
-    const s2 = p2.score;
-
-
-    p1 =
-      makePlayer(
-        150,
-        '#ff5252',
-        1
-      );
+            const score2 =
+                p2.score;
 
 
-    p2 =
-      makePlayer(
-        720,
-        '#448aff',
-        -1
-      );
+            p1 =
+                makePlayer(
+                    150,
+                    "#ff5252",
+                    1
+                );
 
 
-    p1.score = s1;
-
-    p2.score = s2;
-
-
-    bullets = [];
-
-    roundOver = false;
+            p2 =
+                makePlayer(
+                    720,
+                    "#448aff",
+                    -1
+                );
 
 
-    document
-      .getElementById('msg')
-      .style.display =
-      'none';
+            p1.score =
+                score1;
+
+            p2.score =
+                score2;
 
 
-    document
-      .getElementById('restartBtn')
-      .style.display =
-      'none';
+            bullets = [];
+
+            roundOver = false;
 
 
-    updateHUD();
+            document
+                .getElementById(
+                    "msg"
+                )
+                .style.display =
+                "none";
 
-  };
+
+            document
+                .getElementById(
+                    "restartBtn"
+                )
+                .style.display =
+                "none";
 
 
-/* =========================================================
+            updateHUD();
+
+        }
+    );
+
+
+/* =====================================================
    MOBILE TOUCH CONTROLS
-========================================================= */
+===================================================== */
 
-const mobileButtons =
-  document.querySelectorAll(
-    '.controlBtn'
-  );
-
-
-mobileButtons.forEach(
-  function(button) {
-
-    const key =
-      button.dataset.key;
-
-
-    /* TOUCH START */
-
-    button.addEventListener(
-      'touchstart',
-      function(e) {
-
-        e.preventDefault();
-
-        keys[key] = true;
-
-        button.classList.add(
-          'pressed'
-        );
-
-      },
-      {
-        passive: false
-      }
+const controlButtons =
+    document.querySelectorAll(
+        ".controlBtn"
     );
 
 
-    /* TOUCH END */
+controlButtons.forEach(
+    function(button) {
 
-    button.addEventListener(
-      'touchend',
-      function(e) {
-
-        e.preventDefault();
-
-        keys[key] = false;
-
-        button.classList.remove(
-          'pressed'
-        );
-
-      },
-      {
-        passive: false
-      }
-    );
+        const key =
+            button.dataset.key;
 
 
-    /* TOUCH CANCEL */
+        /* ---------------------------------------------
+           PRESS
+        --------------------------------------------- */
 
-    button.addEventListener(
-      'touchcancel',
-      function(e) {
+        function press(e) {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        keys[key] = false;
+            keys[key] = true;
 
-        button.classList.remove(
-          'pressed'
-        );
+            button.classList.add(
+                "pressed"
+            );
 
-      },
-      {
-        passive: false
-      }
-    );
-
-
-    /* POINTER DOWN */
-
-    button.addEventListener(
-      'pointerdown',
-      function(e) {
-
-        if (
-          e.pointerType !== 'touch'
-        ) {
-          return;
         }
 
-        e.preventDefault();
 
-        keys[key] = true;
+        /* ---------------------------------------------
+           RELEASE
+        --------------------------------------------- */
 
-        button.classList.add(
-          'pressed'
-        );
+        function release(e) {
 
-      }
-    );
+            e.preventDefault();
 
+            keys[key] = false;
 
-    /* POINTER UP */
+            button.classList.remove(
+                "pressed"
+            );
 
-    button.addEventListener(
-      'pointerup',
-      function(e) {
-
-        if (
-          e.pointerType !== 'touch'
-        ) {
-          return;
         }
 
-        e.preventDefault();
 
-        keys[key] = false;
+        /* TOUCH START */
 
-        button.classList.remove(
-          'pressed'
+        button.addEventListener(
+            "touchstart",
+            press,
+            {
+                passive: false
+            }
         );
 
-      }
-    );
 
+        /* TOUCH END */
 
-    /* POINTER CANCEL */
-
-    button.addEventListener(
-      'pointercancel',
-      function() {
-
-        keys[key] = false;
-
-        button.classList.remove(
-          'pressed'
+        button.addEventListener(
+            "touchend",
+            release,
+            {
+                passive: false
+            }
         );
 
-      }
-    );
 
-  }
+        /* TOUCH CANCEL */
+
+        button.addEventListener(
+            "touchcancel",
+            release,
+            {
+                passive: false
+            }
+        );
+
+
+        /* POINTER SUPPORT */
+
+        button.addEventListener(
+            "pointerdown",
+            function(e) {
+
+                if (
+                    e.pointerType !==
+                    "touch"
+                ) {
+                    return;
+                }
+
+                press(e);
+
+            }
+        );
+
+
+        button.addEventListener(
+            "pointerup",
+            function(e) {
+
+                if (
+                    e.pointerType !==
+                    "touch"
+                ) {
+                    return;
+                }
+
+                release(e);
+
+            }
+        );
+
+
+        button.addEventListener(
+            "pointercancel",
+            function(e) {
+
+                if (
+                    e.pointerType !==
+                    "touch"
+                ) {
+                    return;
+                }
+
+                release(e);
+
+            }
+        );
+
+    }
 );
 
 
-/* =========================================================
-   INITIAL HUD
-========================================================= */
+/* =====================================================
+   INITIAL
+===================================================== */
 
 updateHUD();
 
