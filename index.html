@@ -2,249 +2,269 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Gun Duel - 50 Levels</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-body{
-    margin:0;
-    background:#101426;
-    color:white;
-    font-family:Arial,sans-serif;
-    text-align:center;
-    overflow-x:hidden;
+body {
+    margin: 0;
+    background: #101426;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow-x: hidden;
 }
 
-button{
-    border:0;
-    color:white;
-    cursor:pointer;
+button {
+    border: none;
+    color: white;
+    cursor: pointer;
 }
 
-#menu{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
+.hidden {
+    display: none !important;
 }
 
-.menuBox{
-    width:95%;
-    max-width:500px;
-    padding:35px;
-    background:#1d2440;
-    border:2px solid #465174;
-    border-radius:20px;
-    box-shadow:0 20px 60px #0008;
+/* ================= MENU ================= */
+
+#menu {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
-.menuBox h1{
-    font-size:42px;
-    margin:5px;
+.menuBox {
+    width: 95%;
+    max-width: 500px;
+    padding: 35px;
+    background: #1d2440;
+    border: 2px solid #465174;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px #0008;
 }
 
-.menuBox p{
-    color:#aab3d5;
+.menuBox h1 {
+    font-size: 42px;
+    margin: 5px;
 }
 
-.startBtn{
-    width:100%;
-    padding:16px;
-    margin-top:15px;
-    background:#315f9c;
-    border-radius:10px;
-    font-size:19px;
+.menuBox p {
+    color: #aab3d5;
 }
 
-.startBtn:hover{
-    background:#4078c0;
+.startBtn {
+    width: 100%;
+    padding: 16px;
+    margin-top: 15px;
+    background: #315f9c;
+    border-radius: 10px;
+    font-size: 19px;
 }
 
-#game{
-    display:none;
-    padding:8px;
+.startBtn:hover {
+    background: #4078c0;
 }
 
-.top{
-    max-width:1100px;
-    margin:auto;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
+/* ================= GAME ================= */
+
+#game {
+    display: none;
+    padding: 8px;
 }
 
-.top h1{
-    margin:5px;
-    font-size:28px;
+.top {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
 
-.levelBox{
-    font-size:20px;
-    font-weight:bold;
+.top h1 {
+    margin: 5px;
+    font-size: 28px;
 }
 
-.difficulty{
-    color:#ffd740;
-    font-size:14px;
+.levelBox {
+    font-size: 20px;
+    font-weight: bold;
 }
 
-#hud{
-    max-width:1100px;
-    margin:5px auto;
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:8px;
+.difficulty {
+    color: #ffd740;
+    font-size: 14px;
 }
 
-.playerHUD{
-    width:180px;
+#hud {
+    max-width: 1100px;
+    margin: 5px auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.hpBg{
-    height:15px;
-    background:#333;
-    border:1px solid #666;
-    border-radius:6px;
-    overflow:hidden;
+.playerHUD {
+    width: 180px;
 }
 
-.hp{
-    height:100%;
-    transition:.15s;
+.hpBg {
+    height: 15px;
+    background: #333;
+    border: 1px solid #666;
+    border-radius: 6px;
+    overflow: hidden;
 }
 
-canvas{
-    display:block;
-    width:100%;
-    max-width:1100px;
-    height:auto;
-    margin:8px auto;
-    border:3px solid #555d80;
-    border-radius:12px;
-    background:#252a43;
+.hp {
+    height: 100%;
+    transition: width 0.15s;
 }
 
-#keyboard{
-    color:#8e96b4;
-    font-size:13px;
+canvas {
+    display: block;
+    width: 100%;
+    max-width: 1100px;
+    height: auto;
+    margin: 8px auto;
+    border: 3px solid #555d80;
+    border-radius: 12px;
+    background: #252a43;
 }
 
-#mobileControls{
-    display:none;
-    max-width:700px;
-    margin:8px auto;
-    justify-content:space-between;
-    align-items:center;
-    touch-action:none;
+#keyboard {
+    color: #8e96b4;
+    font-size: 13px;
 }
 
-.controlGroup{
-    display:flex;
-    gap:8px;
+/* ================= MOBILE CONTROLS ================= */
+
+#mobileControls {
+    display: none;
+    max-width: 700px;
+    margin: 8px auto;
+    justify-content: space-between;
+    align-items: center;
+    touch-action: none;
 }
 
-.control{
-    width:60px;
-    height:60px;
-    border-radius:12px;
-    background:#293250;
-    border:2px solid #555f85;
-    font-size:23px;
-    user-select:none;
+.controlGroup {
+    display: flex;
+    gap: 8px;
 }
 
-.fire{
-    width:75px;
-    height:75px;
-    border-radius:50%;
-    background:#a12f38;
-    font-size:28px;
+.control {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: #293250;
+    border: 2px solid #555f85;
+    font-size: 23px;
+    user-select: none;
 }
 
-.overlay{
-    position:fixed;
-    inset:0;
-    background:#000c;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:20;
+.control:active {
+    background: #46547d;
+    transform: scale(0.95);
 }
 
-.overlayBox{
-    width:90%;
-    max-width:430px;
-    padding:35px;
-    background:#202742;
-    border:2px solid #657198;
-    border-radius:20px;
-    box-shadow:0 20px 70px #000;
+.fire {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    background: #a12f38;
+    font-size: 28px;
 }
 
-.overlayBox h2{
-    font-size:30px;
+/* ================= OVERLAYS ================= */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: #000c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
 }
 
-.overlayIcon{
-    font-size:70px;
+.overlayBox {
+    width: 90%;
+    max-width: 430px;
+    padding: 35px;
+    background: #202742;
+    border: 2px solid #657198;
+    border-radius: 20px;
+    box-shadow: 0 20px 70px #000;
 }
 
-.overlayBtn{
-    width:100%;
-    padding:14px;
-    margin-top:10px;
-    border-radius:9px;
-    background:#3568a7;
-    font-size:17px;
+.overlayBox h2 {
+    font-size: 30px;
 }
 
-.hidden{
-    display:none!important;
+.overlayIcon {
+    font-size: 70px;
 }
 
-@media(max-width:700px){
+.overlayBtn {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border-radius: 9px;
+    background: #3568a7;
+    font-size: 17px;
+}
 
-    #mobileControls{
-        display:flex;
+.overlayBtn:hover {
+    background: #4780c5;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 700px) {
+
+    #mobileControls {
+        display: flex;
     }
 
-    #keyboard{
-        display:none;
+    #keyboard {
+        display: none;
     }
 
-    .top h1{
-        font-size:20px;
+    .top h1 {
+        font-size: 20px;
     }
 
-    .levelBox{
-        font-size:16px;
+    .levelBox {
+        font-size: 16px;
     }
 
-    .difficulty{
-        font-size:11px;
+    .difficulty {
+        font-size: 11px;
     }
 
-    .control{
-        width:52px;
-        height:52px;
+    .control {
+        width: 52px;
+        height: 52px;
     }
 
-    .fire{
-        width:68px;
-        height:68px;
+    .fire {
+        width: 68px;
+        height: 68px;
     }
 
-    .menuBox h1{
-        font-size:32px;
+    .menuBox h1 {
+        font-size: 32px;
     }
 }
 </style>
@@ -252,1333 +272,1771 @@ canvas{
 
 <body>
 
-<!-- ================= MENU ================= -->
+<!-- =====================================================
+     MENU
+===================================================== -->
 
 <div id="menu">
 
-<div class="menuBox">
+    <div class="menuBox">
 
-<h1>🔫 GUN DUEL</h1>
+        <h1>🔫 GUN DUEL</h1>
 
-<p>50 LEVEL OFFLINE CHALLENGE</p>
+        <p>50 LEVEL OFFLINE CHALLENGE</p>
 
-<button class="startBtn" onclick="startGame()">
-START GAME
-</button>
+        <p>
+            Defeat enemies one by one and become the champion!
+        </p>
+
+        <button class="startBtn" onclick="startGame()">
+            START GAME
+        </button>
+
+    </div>
 
 </div>
 
-</div>
 
-
-<!-- ================= GAME ================= -->
+<!-- =====================================================
+     GAME
+===================================================== -->
 
 <div id="game">
 
-<div class="top">
+    <div class="top">
 
-<h1>🔫 GUN DUEL</h1>
+        <h1>🔫 GUN DUEL</h1>
 
-<div class="levelBox">
-LEVEL <span id="level">1</span> / 50
+        <div class="levelBox">
+            LEVEL <span id="level">1</span> / 50
+        </div>
+
+        <div class="difficulty" id="difficulty">
+            BEGINNER
+        </div>
+
+    </div>
+
+
+    <div id="hud"></div>
+
+
+    <canvas id="canvas"
+            width="1100"
+            height="550">
+    </canvas>
+
+
+    <div id="keyboard">
+        A / D = Move &nbsp;&nbsp;
+        W = Jump &nbsp;&nbsp;
+        S = Crouch &nbsp;&nbsp;
+        SPACE = Shoot
+    </div>
+
+
+    <!-- MOBILE CONTROLS -->
+
+    <div id="mobileControls">
+
+        <div class="controlGroup">
+
+            <button class="control" data-key="left">
+                ◀
+            </button>
+
+            <button class="control" data-key="right">
+                ▶
+            </button>
+
+        </div>
+
+
+        <div class="controlGroup">
+
+            <button class="control" data-key="jump">
+                🔼
+            </button>
+
+            <button class="control" data-key="crouch">
+                🔽
+            </button>
+
+            <button class="fire" data-key="fire">
+                🔫
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div class="difficulty" id="difficulty">
-BEGINNER
-</div>
 
-</div>
-
-
-<div id="hud"></div>
-
-
-<canvas id="canvas"
-width="1100"
-height="550">
-</canvas>
-
-
-<div id="keyboard">
-A / D = Move &nbsp;
-W = Jump &nbsp;
-S = Crouch &nbsp;
-SPACE = Shoot
-</div>
-
-
-<!-- MOBILE -->
-
-<div id="mobileControls">
-
-<div class="controlGroup">
-
-<button class="control" data-key="left">
-◀
-</button>
-
-<button class="control" data-key="right">
-▶
-</button>
-
-</div>
-
-
-<div class="controlGroup">
-
-<button class="control" data-key="jump">
-🔼
-</button>
-
-<button class="control" data-key="crouch">
-🔽
-</button>
-
-<button class="fire" data-key="fire">
-🔫
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- ================= LEVEL COMPLETE ================= -->
+<!-- =====================================================
+     LEVEL COMPLETE
+===================================================== -->
 
 <div id="levelWin" class="overlay hidden">
 
-<div class="overlayBox">
+    <div class="overlayBox">
 
-<div class="overlayIcon">🏆</div>
+        <div class="overlayIcon">
+            🏆
+        </div>
 
-<h2>LEVEL COMPLETE!</h2>
+        <h2>
+            LEVEL COMPLETE!
+        </h2>
 
-<p>
-You defeated all enemies.
-</p>
+        <p>
+            All enemies defeated!
+        </p>
 
-<h3>
-LEVEL <span id="completedLevel">1</span> CLEARED
-</h3>
+        <h3>
+            LEVEL
+            <span id="completedLevel">1</span>
+            CLEARED
+        </h3>
 
-<button class="overlayBtn" onclick="nextLevel()">
-NEXT LEVEL →
-</button>
+        <p>
+            ❤️ Health restored to 100%
+        </p>
+
+        <button class="overlayBtn" onclick="nextLevel()">
+            NEXT LEVEL →
+        </button>
+
+    </div>
 
 </div>
 
-</div>
 
-
-<!-- ================= GAME OVER ================= -->
+<!-- =====================================================
+     GAME OVER
+===================================================== -->
 
 <div id="gameOver" class="overlay hidden">
 
-<div class="overlayBox">
+    <div class="overlayBox">
 
-<div class="overlayIcon">💀</div>
+        <div class="overlayIcon">
+            💀
+        </div>
 
-<h2>GAME OVER</h2>
+        <h2>
+            GAME OVER
+        </h2>
 
-<p>You were defeated.</p>
+        <p>
+            You were defeated.
+        </p>
 
-<button class="overlayBtn" onclick="restartLevel()">
-TRY AGAIN
-</button>
+        <button class="overlayBtn" onclick="restartLevel()">
+            TRY AGAIN
+        </button>
+
+    </div>
 
 </div>
 
-</div>
 
-
-<!-- ================= FINAL ================= -->
+<!-- =====================================================
+     FINAL WIN
+===================================================== -->
 
 <div id="finalWin" class="overlay hidden">
 
-<div class="overlayBox">
+    <div class="overlayBox">
 
-<div class="overlayIcon">👑</div>
+        <div class="overlayIcon">
+            👑
+        </div>
 
-<h2>CHAMPION!</h2>
+        <h2>
+            CHAMPION!
+        </h2>
 
-<p>You completed all 50 levels!</p>
+        <p>
+            You completed all 50 levels!
+        </p>
 
-<h3>🔥 LEVEL 50 DEFEATED 🔥</h3>
+        <h3>
+            🔥 LEVEL 50 DEFEATED 🔥
+        </h3>
 
-<button class="overlayBtn" onclick="location.reload()">
-PLAY AGAIN
-</button>
+        <p>
+            You are the ultimate champion!
+        </p>
 
-</div>
+        <button class="overlayBtn"
+                onclick="location.reload()">
+            PLAY AGAIN
+        </button>
+
+    </div>
 
 </div>
 
 
 <script>
 
+/* =====================================================
+   CANVAS
+===================================================== */
+
 const canvas =
-document.getElementById("canvas");
+    document.getElementById("canvas");
 
 const ctx =
-canvas.getContext("2d");
+    canvas.getContext("2d");
 
-const W=canvas.width;
-const H=canvas.height;
+const W = canvas.width;
+const H = canvas.height;
 
-const GROUND=H-60;
+const GROUND = H - 60;
 
-const GRAVITY=.6;
+const GRAVITY = 0.6;
 
 
-let level=1;
-let running=false;
-let levelFinished=false;
+/* =====================================================
+   GAME VARIABLES
+===================================================== */
 
-let bullets=[];
-let particles=[];
+let level = 1;
 
-let keys={};
+let running = false;
+
+let levelFinished = false;
+
+let bullets = [];
+
+let particles = [];
+
+let keys = {};
 
 let player;
 
-let bots=[];
+let bots = [];
 
 
-/* =========================
-PLAYER
-========================= */
+/* =====================================================
+   PLAYER
+===================================================== */
 
-function createPlayer(){
+function createPlayer() {
 
-return{
+    return {
 
-x:100,
-y:GROUND-60,
+        x: 100,
 
-w:32,
-h:60,
+        y: GROUND - 60,
 
-vx:0,
-vy:0,
+        w: 32,
 
-speed:5,
+        h: 60,
 
-health:100,
+        vx: 0,
 
-maxHealth:100,
+        vy: 0,
 
-alive:true,
+        speed: 5,
 
-onGround:true,
+        health: 100,
 
-crouch:false,
+        maxHealth: 100,
 
-facing:1,
+        alive: true,
 
-cooldown:0
+        onGround: true,
 
-};
+        crouch: false,
 
-}
+        facing: 1,
 
+        cooldown: 0
 
-/* =========================
-BOT
-========================= */
-
-function createBot(){
-
-let difficulty=level/50;
-
-return{
-
-x:150+Math.random()*(W-300),
-
-y:GROUND-60,
-
-w:30,
-h:60,
-
-vx:0,
-vy:0,
-
-speed:
-2.0+
-difficulty*4,
-
-health:
-60+
-level*5,
-
-maxHealth:
-60+
-level*5,
-
-alive:true,
-
-onGround:true,
-
-crouch:false,
-
-facing:-1,
-
-cooldown:
-Math.random()*40
-
-};
+    };
 
 }
 
 
-/* =========================
-START GAME
-========================= */
+/* =====================================================
+   BOT
+===================================================== */
 
-function startGame(){
+function createBot(index) {
 
-document.getElementById("menu").style.display="none";
+    /*
+       Difficulty increases with level.
+    */
 
-document.getElementById("game").style.display="block";
+    const difficulty = level / 50;
 
-level=1;
+    const health =
+        60 + level * 5;
 
-player=createPlayer();
+    return {
 
-startLevel();
+        index: index,
 
-running=true;
+        x:
+            600 +
+            Math.random() * 400,
 
-gameLoop();
+        y:
+            GROUND - 60,
 
-}
+        w: 30,
 
+        h: 60,
 
-/* =========================
-START LEVEL
-========================= */
+        vx: 0,
 
-function startLevel(){
+        vy: 0,
 
-bullets=[];
-particles=[];
+        speed:
+            2 +
+            difficulty * 4,
 
-levelFinished=false;
+        health: health,
 
-player=createPlayer();
+        maxHealth: health,
 
-bots=[];
+        alive: false,
 
+        onGround: true,
 
-/*
-Level 1 = 1 bot
-Level 2 = 2 bots
-...
-Level 50 = 50 bots
-*/
+        crouch: false,
 
-for(let i=0;i<level;i++){
+        facing: -1,
 
-bots.push(createBot());
+        cooldown:
+            20 + Math.random() * 30
 
-}
-
-
-updateDifficulty();
-
-updateHUD();
+    };
 
 }
 
 
-/* =========================
-DIFFICULTY
-========================= */
+/* =====================================================
+   START GAME
+===================================================== */
 
-function updateDifficulty(){
+function startGame() {
 
-let text;
+    document.getElementById("menu")
+        .style.display = "none";
 
-if(level===50)
-text="💀 ULTIMATE";
+    document.getElementById("game")
+        .style.display = "block";
 
-else if(level>=46)
-text="☠️ DEMON";
+    level = 1;
 
-else if(level>=41)
-text="👹 LEGENDARY";
+    running = true;
 
-else if(level>=36)
-text="💀 INSANE";
+    levelFinished = false;
 
-else if(level>=31)
-text="☠️ NIGHTMARE";
+    startLevel();
 
-else if(level>=26)
-text="🔥 EXTREME";
-
-else if(level>=21)
-text="🔴 VERY HARD";
-
-else if(level>=16)
-text="🟠 HARD";
-
-else if(level>=11)
-text="🟡 MEDIUM";
-
-else if(level>=6)
-text="🟢 EASY";
-
-else
-text="🟢 BEGINNER";
-
-document.getElementById("level")
-.textContent=level;
-
-document.getElementById("difficulty")
-.textContent=text;
+    gameLoop();
 
 }
 
 
-/* =========================
-KEYBOARD
-========================= */
+/* =====================================================
+   START LEVEL
+===================================================== */
+
+function startLevel() {
+
+    bullets = [];
+
+    particles = [];
+
+    levelFinished = false;
+
+    /*
+       Player gets full health
+       at the beginning of every level.
+    */
+
+    player = createPlayer();
+
+    bots = [];
+
+
+    /*
+       Level 1 = 1 bot
+       Level 2 = 2 bots
+       ...
+       Level 50 = 50 bots
+
+       BUT only one is alive at a time.
+    */
+
+    for (
+        let i = 0;
+        i < level;
+        i++
+    ) {
+
+        bots.push(
+            createBot(i)
+        );
+
+    }
+
+
+    /*
+       Activate ONLY first bot.
+    */
+
+    if (bots.length > 0) {
+
+        bots[0].alive = true;
+
+        spawnBot(bots[0]);
+
+    }
+
+
+    updateDifficulty();
+
+    updateHUD();
+
+}
+
+
+/* =====================================================
+   SPAWN BOT
+===================================================== */
+
+function spawnBot(bot) {
+
+    /*
+       Keep bot away from player.
+    */
+
+    if (Math.random() < 0.5) {
+
+        bot.x =
+            650 +
+            Math.random() * 350;
+
+    } else {
+
+        bot.x =
+            300 +
+            Math.random() * 250;
+
+    }
+
+
+    bot.y =
+        GROUND - bot.h;
+
+    bot.vx = 0;
+
+    bot.vy = 0;
+
+    bot.alive = true;
+
+    bot.health =
+        bot.maxHealth;
+
+    bot.cooldown =
+        Math.max(
+            8,
+            30 - level * 0.4
+        );
+
+}
+
+
+/* =====================================================
+   DIFFICULTY
+===================================================== */
+
+function updateDifficulty() {
+
+    let text;
+
+    if (level === 50)
+        text = "💀 ULTIMATE";
+
+    else if (level >= 46)
+        text = "☠️ DEMON";
+
+    else if (level >= 41)
+        text = "👹 LEGENDARY";
+
+    else if (level >= 36)
+        text = "💀 INSANE";
+
+    else if (level >= 31)
+        text = "☠️ NIGHTMARE";
+
+    else if (level >= 26)
+        text = "🔥 EXTREME";
+
+    else if (level >= 21)
+        text = "🔴 VERY HARD";
+
+    else if (level >= 16)
+        text = "🟠 HARD";
+
+    else if (level >= 11)
+        text = "🟡 MEDIUM";
+
+    else if (level >= 6)
+        text = "🟢 EASY";
+
+    else
+        text = "🟢 BEGINNER";
+
+
+    document.getElementById("level")
+        .textContent = level;
+
+    document.getElementById("difficulty")
+        .textContent = text;
+
+}
+
+
+/* =====================================================
+   KEYBOARD
+===================================================== */
 
 document.addEventListener(
-"keydown",
-function(e){
+    "keydown",
+    function(e) {
 
-keys[e.code]=true;
+        keys[e.code] = true;
 
-if([
-"Space",
-"ArrowUp",
-"ArrowDown",
-"ArrowLeft",
-"ArrowRight"
-].includes(e.code)){
+        if (
+            [
+                "Space",
+                "ArrowUp",
+                "ArrowDown",
+                "ArrowLeft",
+                "ArrowRight"
+            ].includes(e.code)
+        ) {
 
-e.preventDefault();
+            e.preventDefault();
 
-}
+        }
 
-});
+    }
+);
 
 
 document.addEventListener(
-"keyup",
-function(e){
+    "keyup",
+    function(e) {
 
-keys[e.code]=false;
+        keys[e.code] = false;
 
-});
+    }
+);
 
 
-/* =========================
-MOBILE CONTROLS
-========================= */
+/* =====================================================
+   MOBILE CONTROLS
+===================================================== */
 
 document.querySelectorAll(
-"[data-key]"
-).forEach(button=>{
+    "[data-key]"
+).forEach(button => {
 
-let action=button.dataset.key;
-
-
-function press(e){
-
-e.preventDefault();
-
-keys[action]=true;
-
-}
+    const action =
+        button.dataset.key;
 
 
-function release(e){
+    function press(e) {
 
-e.preventDefault();
+        e.preventDefault();
 
-keys[action]=false;
+        keys[action] = true;
 
-}
-
-
-button.addEventListener(
-"touchstart",
-press,
-{passive:false}
-);
-
-button.addEventListener(
-"touchend",
-release,
-{passive:false}
-);
-
-button.addEventListener(
-"touchcancel",
-release,
-{passive:false}
-);
+    }
 
 
-/* Mouse also works for testing */
+    function release(e) {
 
-button.addEventListener(
-"mousedown",
-press
-);
+        e.preventDefault();
 
-button.addEventListener(
-"mouseup",
-release
-);
+        keys[action] = false;
 
-button.addEventListener(
-"mouseleave",
-release
-);
+    }
+
+
+    button.addEventListener(
+        "touchstart",
+        press,
+        { passive: false }
+    );
+
+
+    button.addEventListener(
+        "touchend",
+        release,
+        { passive: false }
+    );
+
+
+    button.addEventListener(
+        "touchcancel",
+        release,
+        { passive: false }
+    );
+
+
+    /*
+       Mouse support also included.
+    */
+
+    button.addEventListener(
+        "mousedown",
+        press
+    );
+
+
+    button.addEventListener(
+        "mouseup",
+        release
+    );
+
+
+    button.addEventListener(
+        "mouseleave",
+        release
+    );
 
 });
 
 
-/* =========================
-PLAYER UPDATE
-========================= */
+/* =====================================================
+   PLAYER UPDATE
+===================================================== */
 
-function updatePlayer(){
+function updatePlayer() {
 
-if(!player.alive)return;
-
-
-player.vx=0;
+    if (!player.alive)
+        return;
 
 
-if(
-keys["KeyA"] ||
-keys["ArrowLeft"] ||
-keys["left"]
-){
-
-player.vx=-player.speed;
-
-player.facing=-1;
-
-}
+    player.vx = 0;
 
 
-if(
-keys["KeyD"] ||
-keys["ArrowRight"] ||
-keys["right"]
-){
+    /*
+       LEFT
+    */
 
-player.vx=player.speed;
+    if (
+        keys["KeyA"] ||
+        keys["ArrowLeft"] ||
+        keys["left"]
+    ) {
 
-player.facing=1;
+        player.vx =
+            -player.speed;
 
-}
+        player.facing = -1;
 
-
-/* Jump */
-
-if(
-(
-keys["KeyW"] ||
-keys["ArrowUp"] ||
-keys["jump"]
-)
-&&
-player.onGround
-){
-
-player.vy=-12;
-
-player.onGround=false;
-
-}
+    }
 
 
-/* Crouch */
+    /*
+       RIGHT
+    */
 
-player.crouch=
-(
-keys["KeyS"] ||
-keys["ArrowDown"] ||
-keys["crouch"]
-)
-&&
-player.onGround;
+    if (
+        keys["KeyD"] ||
+        keys["ArrowRight"] ||
+        keys["right"]
+    ) {
 
+        player.vx =
+            player.speed;
 
-/* Shoot */
+        player.facing = 1;
 
-if(
-keys["Space"] ||
-keys["Enter"] ||
-keys["fire"]
-){
-
-shoot(player);
-
-}
+    }
 
 
-physics(player);
+    /*
+       JUMP
+    */
 
-}
+    if (
+        (
+            keys["KeyW"] ||
+            keys["ArrowUp"] ||
+            keys["jump"]
+        ) &&
+        player.onGround
+    ) {
 
+        player.vy = -12;
 
-/* =========================
-BOT AI
-========================= */
+        player.onGround = false;
 
-function updateBots(){
-
-bots.forEach(bot=>{
-
-if(!bot.alive)return;
-
-
-let dx=
-player.x-bot.x;
-
-let distance=
-Math.abs(dx);
+    }
 
 
-/* Move toward player */
+    /*
+       CROUCH
+    */
 
-if(distance>140){
+    player.crouch =
+        (
+            keys["KeyS"] ||
+            keys["ArrowDown"] ||
+            keys["crouch"]
+        ) &&
+        player.onGround;
 
-bot.vx=
-dx>0
-?bot.speed
-:-bot.speed;
 
-}else{
+    /*
+       SHOOT
+    */
 
-bot.vx=0;
+    if (
+        keys["Space"] ||
+        keys["Enter"] ||
+        keys["fire"]
+    ) {
+
+        shoot(player);
+
+    }
+
+
+    physics(player);
 
 }
 
 
-bot.facing=
-dx>0?1:-1;
+/* =====================================================
+   BOT UPDATE
+===================================================== */
+
+function updateBots() {
+
+    bots.forEach(bot => {
+
+        /*
+           DEAD / WAITING BOTS
+           DO NOTHING.
+        */
+
+        if (!bot.alive)
+            return;
 
 
-/* Random jump */
+        let dx =
+            player.x - bot.x;
 
-if(
-bot.onGround &&
-Math.random()<
-.002+level*.0001
-){
-
-bot.vy=-11;
-
-bot.onGround=false;
-
-}
+        let distance =
+            Math.abs(dx);
 
 
-/* Shooting */
+        /*
+           Move toward player.
+        */
 
-if(bot.cooldown>0){
+        if (distance > 150) {
 
-bot.cooldown--;
+            bot.vx =
+                dx > 0
+                ? bot.speed
+                : -bot.speed;
 
-}else{
+        } else {
 
-/*
-Higher levels shoot faster
-*/
+            bot.vx = 0;
 
-let chance=
-.15+
-level*.012;
-
-if(Math.random()<chance){
-
-shoot(bot);
-
-}
-
-bot.cooldown=
-Math.max(
-7,
-30-level*.4
-)+
-Math.random()*20;
-
-}
+        }
 
 
-physics(bot);
+        /*
+           Face player.
+        */
 
-});
-
-}
-
-
-/* =========================
-PHYSICS
-========================= */
-
-function physics(p){
-
-p.x+=p.vx;
-
-p.vy+=GRAVITY;
-
-p.y+=p.vy;
+        bot.facing =
+            dx > 0
+            ? 1
+            : -1;
 
 
-if(
-p.y+p.h>=GROUND
-){
+        /*
+           Jump.
+           Higher levels jump more.
+        */
 
-p.y=GROUND-p.h;
-
-p.vy=0;
-
-p.onGround=true;
-
-}
+        let jumpChance =
+            0.002 +
+            level * 0.0002;
 
 
-p.x=Math.max(
-0,
-Math.min(
-W-p.w,
-p.x
-)
-);
+        if (
+            bot.onGround &&
+            Math.random() < jumpChance
+        ) {
+
+            bot.vy = -11;
+
+            bot.onGround = false;
+
+        }
 
 
-if(p.cooldown>0){
+        /*
+           SHOOT
+        */
 
-p.cooldown--;
+        if (bot.cooldown > 0) {
 
-}
+            bot.cooldown--;
 
-}
+        } else {
 
-
-/* =========================
-SHOOT
-========================= */
-
-function shoot(p){
-
-if(
-!p.alive ||
-p.cooldown>0
-)return;
+            let chance =
+                0.15 +
+                level * 0.012;
 
 
-p.cooldown=14;
+            if (
+                Math.random() < chance
+            ) {
+
+                shoot(bot);
+
+            }
 
 
-bullets.push({
+            bot.cooldown =
+                Math.max(
+                    7,
+                    30 - level * 0.4
+                ) +
+                Math.random() * 20;
 
-x:
-p.facing>0
-?p.x+p.w
-:p.x,
+        }
 
-y:
-p.y+
-(
-p.crouch
-?p.h*.65
-:p.h*.3
-),
 
-vx:
-13*p.facing,
+        physics(bot);
 
-owner:p
-
-});
+    });
 
 }
 
 
-/* =========================
-BULLETS
-========================= */
+/* =====================================================
+   PHYSICS
+===================================================== */
 
-function updateBullets(){
+function physics(p) {
 
-bullets.forEach(
-b=>b.x+=b.vx
-);
+    p.x += p.vx;
 
+    p.vy += GRAVITY;
 
-bullets=
-bullets.filter(
-b=>{
-
-if(
-b.x<0 ||
-b.x>W
-)return false;
+    p.y += p.vy;
 
 
-let targets=[
-player,
-...bots
-];
+    /*
+       Ground
+    */
+
+    if (
+        p.y + p.h >= GROUND
+    ) {
+
+        p.y =
+            GROUND - p.h;
+
+        p.vy = 0;
+
+        p.onGround = true;
+
+    }
 
 
-for(
-let target of targets
-){
+    /*
+       Screen boundaries
+    */
 
-if(
-!target.alive ||
-target===b.owner
-)continue;
-
-
-let top=
-target.crouch
-?target.y+target.h*.4
-:target.y;
-
-let height=
-target.crouch
-?target.h*.6
-:target.h;
+    p.x =
+        Math.max(
+            0,
+            Math.min(
+                W - p.w,
+                p.x
+            )
+        );
 
 
-if(
+    if (p.cooldown > 0) {
 
-b.x>target.x &&
-b.x<target.x+target.w &&
+        p.cooldown--;
 
-b.y>top &&
-b.y<top+height
-
-){
-
-hit(target);
-
-return false;
-
-}
+    }
 
 }
 
 
-return true;
+/* =====================================================
+   SHOOT
+===================================================== */
 
-});
+function shoot(p) {
 
-}
-
-
-/* =========================
-HIT
-========================= */
-
-function hit(target){
-
-target.health-=20;
+    if (
+        !p.alive ||
+        p.cooldown > 0
+    )
+        return;
 
 
-/* red non-graphic hit effect */
+    p.cooldown = 14;
 
-for(
-let i=0;
-i<14;
-i++
-){
 
-particles.push({
+    bullets.push({
 
-x:
-target.x+
-target.w/2,
+        x:
+            p.facing > 0
+            ? p.x + p.w
+            : p.x,
 
-y:
-target.y+
-target.h*.4,
+        y:
+            p.y +
+            (
+                p.crouch
+                ? p.h * 0.65
+                : p.h * 0.3
+            ),
 
-vx:
-(Math.random()-.5)*7,
+        vx:
+            13 * p.facing,
 
-vy:
-(Math.random()-.5)*7,
+        owner: p
 
-life:
-20+
-Math.random()*20,
-
-size:
-2+
-Math.random()*4
-
-});
+    });
 
 }
 
 
-if(
-target.health<=0
-){
+/* =====================================================
+   BULLETS
+===================================================== */
 
-target.health=0;
+function updateBullets() {
 
-target.alive=false;
+    bullets.forEach(
+        b => {
 
-}
+            b.x += b.vx;
 
-}
-
-
-/* =========================
-PARTICLES
-========================= */
-
-function updateParticles(){
-
-particles.forEach(p=>{
-
-p.x+=p.vx;
-
-p.y+=p.vy;
-
-p.vy+=.15;
-
-p.life--;
-
-});
+        }
+    );
 
 
-particles=
-particles.filter(
-p=>p.life>0
-);
+    bullets =
+        bullets.filter(
+            b => {
 
-}
+                /*
+                   Outside screen
+                */
 
-
-/* =========================
-CHECK WIN
-========================= */
-
-function checkGame(){
-
-if(levelFinished)return;
+                if (
+                    b.x < 0 ||
+                    b.x > W
+                )
+                    return false;
 
 
-/* Player dead */
+                /*
+                   Player / bots
+                */
 
-if(!player.alive){
-
-levelFinished=true;
-
-document.getElementById(
-"gameOver"
-).classList.remove(
-"hidden"
-);
-
-return;
-
-}
+                let targets = [
+                    player,
+                    ...bots
+                ];
 
 
-/* Bots left */
+                for (
+                    let target
+                    of targets
+                ) {
 
-let aliveBots=
-bots.filter(
-b=>b.alive
-).length;
-
-
-if(aliveBots===0){
-
-levelFinished=true;
-
-document.getElementById(
-"completedLevel"
-).textContent=level;
-
-document.getElementById(
-"levelWin"
-).classList.remove(
-"hidden"
-);
-
-}
-
-}
+                    if (
+                        !target.alive ||
+                        target === b.owner
+                    )
+                        continue;
 
 
-/* =========================
-NEXT LEVEL
-========================= */
-
-function nextLevel(){
-
-document.getElementById(
-"levelWin"
-).classList.add(
-"hidden"
-);
+                    let top =
+                        target.crouch
+                        ? target.y +
+                          target.h * 0.4
+                        : target.y;
 
 
-if(level>=50){
+                    let height =
+                        target.crouch
+                        ? target.h * 0.6
+                        : target.h;
 
-document.getElementById(
-"finalWin"
-).classList.remove(
-"hidden"
-);
 
-return;
+                    if (
+
+                        b.x >
+                        target.x &&
+
+                        b.x <
+                        target.x +
+                        target.w &&
+
+                        b.y >
+                        top &&
+
+                        b.y <
+                        top + height
+
+                    ) {
+
+                        hit(target);
+
+                        return false;
+
+                    }
+
+                }
+
+
+                return true;
+
+            }
+        );
 
 }
 
 
-level++;
+/* =====================================================
+   HIT
+===================================================== */
 
-startLevel();
+function hit(target) {
+
+    /*
+       Damage
+    */
+
+    target.health -= 20;
+
+
+    /*
+       Hit particles
+    */
+
+    for (
+        let i = 0;
+        i < 14;
+        i++
+    ) {
+
+        particles.push({
+
+            x:
+                target.x +
+                target.w / 2,
+
+            y:
+                target.y +
+                target.h * 0.4,
+
+            vx:
+                (Math.random() - 0.5) * 7,
+
+            vy:
+                (Math.random() - 0.5) * 7,
+
+            life:
+                20 +
+                Math.random() * 20,
+
+            size:
+                2 +
+                Math.random() * 4
+
+        });
+
+    }
+
+
+    /*
+       TARGET DEFEATED
+    */
+
+    if (
+        target.health <= 0
+    ) {
+
+        target.health = 0;
+
+        target.alive = false;
+
+
+        /*
+           ❤️ FULL HEALTH
+           after defeating bot
+        */
+
+        player.health =
+            player.maxHealth;
+
+
+        /*
+           Find current bot
+        */
+
+        let currentIndex =
+            bots.indexOf(target);
+
+
+        /*
+           Find next bot
+        */
+
+        let nextBot = null;
+
+
+        for (
+            let i =
+                currentIndex + 1;
+
+            i < bots.length;
+
+            i++
+        ) {
+
+            /*
+               This bot has not
+               been defeated yet.
+            */
+
+            if (
+                !bots[i].alive &&
+                !bots[i].defeated
+            ) {
+
+                nextBot =
+                    bots[i];
+
+                break;
+
+            }
+
+        }
+
+
+        /*
+           Mark defeated bots.
+        */
+
+        target.defeated = true;
+
+
+        /*
+           Spawn next bot
+        */
+
+        if (nextBot) {
+
+            spawnBot(nextBot);
+
+        }
+
+
+        /*
+           Count defeated bots
+        */
+
+        let defeatedBots =
+            bots.filter(
+                b => b.defeated
+            ).length;
+
+
+        /*
+           ALL BOTS DEFEATED
+        */
+
+        if (
+            defeatedBots ===
+            bots.length
+        ) {
+
+            levelFinished = true;
+
+
+            document.getElementById(
+                "completedLevel"
+            ).textContent =
+                level;
+
+
+            document.getElementById(
+                "levelWin"
+            ).classList.remove(
+                "hidden"
+            );
+
+        }
+
+    }
 
 }
 
 
-/* =========================
-RESTART
-========================= */
+/* =====================================================
+   PARTICLES
+===================================================== */
 
-function restartLevel(){
+function updateParticles() {
 
-document.getElementById(
-"gameOver"
-).classList.add(
-"hidden"
-);
+    particles.forEach(
+        p => {
 
-startLevel();
+            p.x += p.vx;
 
-}
+            p.y += p.vy;
 
+            p.vy += 0.15;
 
-/* =========================
-HUD
-========================= */
+            p.life--;
 
-function updateHUD(){
-
-let html=`
-
-<div class="playerHUD">
-
-<div style="color:#ff5252">
-PLAYER
-</div>
-
-<div class="hpBg">
-
-<div
-class="hp"
-style="
-width:${player.health}%;
-background:#ff5252">
-</div>
-
-</div>
-
-</div>
-
-`;
+        }
+    );
 
 
-bots.slice(0,8).forEach(
-(bot,i)=>{
-
-html+=`
-
-<div class="playerHUD">
-
-<div style="color:#b66cff">
-BOT ${i+1}
-</div>
-
-<div class="hpBg">
-
-<div
-class="hp"
-style="
-width:${Math.max(
-0,
-bot.health/bot.maxHealth*100
-)}%;
-background:#a855f7">
-</div>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-
-if(bots.length>8){
-
-html+=`
-
-<div style="
-padding:10px;
-color:#aaa">
-
-+ ${bots.length-8}
-more bots
-
-</div>
-
-`;
+    particles =
+        particles.filter(
+            p => p.life > 0
+        );
 
 }
 
 
-document.getElementById(
-"hud"
-).innerHTML=html;
+/* =====================================================
+   NEXT LEVEL
+===================================================== */
+
+function nextLevel() {
+
+    document.getElementById(
+        "levelWin"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    /*
+       Level 50 complete
+    */
+
+    if (
+        level >= 50
+    ) {
+
+        document.getElementById(
+            "finalWin"
+        ).classList.remove(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Next level
+    */
+
+    level++;
+
+    startLevel();
 
 }
 
 
-/* =========================
-DRAW
-========================= */
+/* =====================================================
+   RESTART LEVEL
+===================================================== */
 
-function draw(){
+function restartLevel() {
 
-ctx.clearRect(
-0,0,W,H
-);
+    document.getElementById(
+        "gameOver"
+    ).classList.add(
+        "hidden"
+    );
 
-
-/* Background */
-
-let gradient=
-ctx.createLinearGradient(
-0,0,0,H
-);
-
-gradient.addColorStop(
-0,
-"#20243d"
-);
-
-gradient.addColorStop(
-1,
-"#3d4262"
-);
-
-ctx.fillStyle=gradient;
-
-ctx.fillRect(
-0,0,W,H
-);
-
-
-/* Ground */
-
-ctx.fillStyle="#484d6b";
-
-ctx.fillRect(
-0,
-GROUND,
-W,
-H-GROUND
-);
-
-
-/* Draw player */
-
-drawCharacter(
-player,
-"#ff5252"
-);
-
-
-/* Draw bots */
-
-bots.forEach(
-bot=>{
-drawCharacter(
-bot,
-"#a855f7"
-);
-});
-
-
-/* Bullets */
-
-bullets.forEach(
-b=>{
-
-ctx.fillStyle="#ffd740";
-
-ctx.beginPath();
-
-ctx.arc(
-b.x,
-b.y,
-5,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-});
-
-
-/* Particles */
-
-particles.forEach(
-p=>{
-
-ctx.globalAlpha=
-Math.max(
-0,
-p.life/40
-);
-
-ctx.fillStyle="#ff3d55";
-
-ctx.fillRect(
-p.x,
-p.y,
-p.size,
-p.size
-);
-
-});
-
-ctx.globalAlpha=1;
+    startLevel();
 
 }
 
 
-/* =========================
-CHARACTER
-========================= */
+/* =====================================================
+   CHECK GAME
+===================================================== */
+
+function checkGame() {
+
+    if (levelFinished)
+        return;
+
+
+    /*
+       Player dead
+    */
+
+    if (!player.alive) {
+
+        levelFinished = true;
+
+        document.getElementById(
+            "gameOver"
+        ).classList.remove(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   HUD
+===================================================== */
+
+function updateHUD() {
+
+    if (!player)
+        return;
+
+
+    let html = `
+
+        <div class="playerHUD">
+
+            <div style="color:#ff5252">
+                PLAYER ❤️
+            </div>
+
+            <div class="hpBg">
+
+                <div
+                    class="hp"
+                    style="
+                    width:${player.health}%;
+                    background:#ff5252">
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    /*
+       Show current bot health.
+    */
+
+    let activeBot =
+        bots.find(
+            b => b.alive
+        );
+
+
+    if (activeBot) {
+
+        let botNumber =
+            activeBot.index + 1;
+
+
+        html += `
+
+            <div class="playerHUD">
+
+                <div style="color:#b66cff">
+
+                    BOT ${botNumber}
+
+                </div>
+
+                <div class="hpBg">
+
+                    <div
+                        class="hp"
+                        style="
+                        width:${
+                            Math.max(
+                                0,
+                                activeBot.health /
+                                activeBot.maxHealth *
+                                100
+                            )
+                        }%;
+                        background:#a855f7">
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /*
+       Progress
+    */
+
+    let defeated =
+        bots.filter(
+            b => b.defeated
+        ).length;
+
+
+    html += `
+
+        <div style="
+            padding:10px;
+            color:#aaa;
+        ">
+
+            DEFEATED:
+            ${defeated}/${level}
+
+        </div>
+
+    `;
+
+
+    document.getElementById(
+        "hud"
+    ).innerHTML = html;
+
+}
+
+
+/* =====================================================
+   DRAW CHARACTER
+===================================================== */
 
 function drawCharacter(
-p,
-color
-){
+    p,
+    color
+) {
 
-if(!p.alive)return;
-
-
-let bodyHeight=
-p.crouch
-?p.h*.6
-:p.h;
-
-let bodyY=
-p.crouch
-?p.y+p.h*.4
-:p.y;
+    if (!p.alive)
+        return;
 
 
-ctx.fillStyle=color;
-
-ctx.fillRect(
-p.x,
-bodyY,
-p.w,
-bodyHeight
-);
+    let bodyHeight =
+        p.crouch
+        ? p.h * 0.6
+        : p.h;
 
 
-/* Head */
-
-ctx.beginPath();
-
-ctx.arc(
-p.x+p.w/2,
-bodyY-9,
-11,
-0,
-Math.PI*2
-);
-
-ctx.fill();
+    let bodyY =
+        p.crouch
+        ? p.y + p.h * 0.4
+        : p.y;
 
 
-/* Gun */
+    /*
+       Body
+    */
 
-ctx.fillStyle="#111";
+    ctx.fillStyle = color;
 
-if(p.facing>0){
-
-ctx.fillRect(
-p.x+p.w,
-bodyY+bodyHeight*.35,
-22,
-7
-);
-
-}else{
-
-ctx.fillRect(
-p.x-22,
-bodyY+bodyHeight*.35,
-22,
-7
-);
-
-}
-
-}
+    ctx.fillRect(
+        p.x,
+        bodyY,
+        p.w,
+        bodyHeight
+    );
 
 
-/* =========================
-GAME LOOP
-========================= */
+    /*
+       Head
+    */
 
-function gameLoop(){
+    ctx.beginPath();
 
-if(!running)return;
+    ctx.arc(
+        p.x + p.w / 2,
+        bodyY - 9,
+        11,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
 
 
-if(!levelFinished){
+    /*
+       Gun
+    */
 
-updatePlayer();
+    ctx.fillStyle = "#111";
 
-updateBots();
 
-updateBullets();
+    if (
+        p.facing > 0
+    ) {
 
-updateParticles();
+        ctx.fillRect(
+            p.x + p.w,
+            bodyY +
+            bodyHeight * 0.35,
+            22,
+            7
+        );
 
-checkGame();
+    } else {
 
-updateHUD();
+        ctx.fillRect(
+            p.x - 22,
+            bodyY +
+            bodyHeight * 0.35,
+            22,
+            7
+        );
+
+    }
 
 }
 
 
-draw();
+/* =====================================================
+   DRAW
+===================================================== */
+
+function draw() {
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
 
 
-requestAnimationFrame(
-gameLoop
-);
+    /*
+       Background
+    */
+
+    let gradient =
+        ctx.createLinearGradient(
+            0,
+            0,
+            0,
+            H
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "#20243d"
+    );
+
+
+    gradient.addColorStop(
+        1,
+        "#3d4262"
+    );
+
+
+    ctx.fillStyle =
+        gradient;
+
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    /*
+       Ground
+    */
+
+    ctx.fillStyle =
+        "#484d6b";
+
+
+    ctx.fillRect(
+        0,
+        GROUND,
+        W,
+        H - GROUND
+    );
+
+
+    ctx.strokeStyle =
+        "#68708f";
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        GROUND
+    );
+
+    ctx.lineTo(
+        W,
+        GROUND
+    );
+
+    ctx.stroke();
+
+
+    /*
+       Player
+    */
+
+    drawCharacter(
+        player,
+        "#ff5252"
+    );
+
+
+    /*
+       Bots
+    */
+
+    bots.forEach(
+        bot => {
+
+            drawCharacter(
+                bot,
+                "#a855f7"
+            );
+
+        }
+    );
+
+
+    /*
+       Bullets
+    */
+
+    bullets.forEach(
+        b => {
+
+            ctx.fillStyle =
+                "#ffd740";
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                b.x,
+                b.y,
+                5,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+        }
+    );
+
+
+    /*
+       Hit particles
+    */
+
+    particles.forEach(
+        p => {
+
+            ctx.globalAlpha =
+                Math.max(
+                    0,
+                    p.life / 40
+                );
+
+
+            ctx.fillStyle =
+                "#ff3d55";
+
+
+            ctx.fillRect(
+                p.x,
+                p.y,
+                p.size,
+                p.size
+            );
+
+        }
+    );
+
+
+    ctx.globalAlpha = 1;
+
+}
+
+
+/* =====================================================
+   GAME LOOP
+===================================================== */
+
+function gameLoop() {
+
+    if (!running)
+        return;
+
+
+    if (!levelFinished) {
+
+        updatePlayer();
+
+        updateBots();
+
+        updateBullets();
+
+        updateParticles();
+
+        checkGame();
+
+        updateHUD();
+
+    }
+
+
+    draw();
+
+
+    requestAnimationFrame(
+        gameLoop
+    );
 
 }
 
