@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gun Duel — 2 Player</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: #eee;
+    padding: 16px;
+  }
+  h1 { margin: 8px 0; letter-spacing: 2px; }
+  #hud {
+    display: flex;
+    justify-content: space-between;
+    width: 900px;
+    max-width: 95vw;
+    margin-bottom: 6px;
+  }
+  .healthbox { width: 45%; }
+  .healthbox .name { font-weight: bold; margin-bottom: 4px; }
+  .bar-bg { background: #333; border-radius: 6px; height: 22px; overflow: hidden; border: 2px solid #555; }
+  .bar-fill { height: 100%; transition: width 0.15s; }
+  #p1fill { background: linear-gradient(90deg,#ff5252,#ff8a80); }
+  #p2fill { background: linear-gradient(90deg,#448aff,#82b1ff); }
+  #score { font-size: 14px; color: #aaa; text-align: center; margin-bottom: 4px;}
+  canvas {
+    background: #2b2b45;
+    border: 3px solid #555;
+    border-radius: 8px;
+    display: block;
+  }
+  #info {
+    width: 900px;
+    max-width: 95vw;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #999;
+    margin-top: 8px;
+  }
+  #msg {
+    position: absolute;
+    top: 40%;
+    font-size: 40px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 10px #000;
+    display: none;
+  }
+  #restartBtn {
+    margin-top: 10px;
+    padding: 8px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: none;
+    background: #444;
+    color: #fff;
+    cursor: pointer;
+    display: none;
+  }
+  #restartBtn:hover { background: #666; }
+  .wrap { position: relative; }
+  #modeScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 40px;
+  }
+  #modeScreen p { color: #aaa; margin: 0; }
+  .modeBtn {
+    width: 260px;
+    padding: 16px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: 2px solid #555;
+    background: #2b2b45;
+    color: #fff;
+    cursor: pointer;
+  }
+  .modeBtn:hover { background: #3a3a5c; border-color: #888; }
+  #gameArea { display: none; flex-direction: column; align-items: center; width: 100%; }
+</style>
+</head>
+<body>
+<h1>🔫 GUN DUEL 🔫</h1>
+
+<div id="modeScreen">
+  <p>Choose a mode</p>
+  <button class="modeBtn" id="botModeBtn">1 Player — vs Bot</button>
+  <button class="modeBtn" id="pvpModeBtn">2 Players — vs Friend</button>
+</div>
+
+<div id="gameArea">
+<div id="hud">
+  <div class="healthbox">
+    <div class="name" style="color:#ff5252">Player 1</div>
+    <div class="bar-bg"><div class="bar-fill" id="p1fill" style="width:100%"></div></div>
+  </div>
+  <div class="healthbox" style="text-align:right">
+    <div class="name" style="color:#448aff">Player 2</div>
+    <div class="bar-bg"><div class="bar-fill" id="p2fill" style="width:100%"></div></div>
+  </div>
+</div>
+<div id="score">Score — Player 1: <span id="s1">0</span> &nbsp;|&nbsp; Player 2: <span id="s2">0</span></div>
+<div class="wrap">
+  <canvas id="game" width="900" height="450"></canvas>
+  <div id="msg"></div>
+</div>
+<button id="restartBtn">Restart Round</button>
+<div id="info">
+  <div><b>Player 1:</b> A/D move, W jump, S crouch, SPACE shoot</div>
+  <div id="p2info"><b>Player 2:</b> ←/→ move, ↑ jump, ↓ crouch, ENTER shoot</div>
+</div>
+</div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+const GROUND_Y = H - 50;
+const GRAVITY = 0.6;
+
+function makePlayer(x, color, facing) {
+  return {
+    x, y: GROUND_Y - 60, w: 30, h: 60,
+    vx: 0, vy: 0,
+    color, facing,
+    health: 100,
+    onGround: true,
+    crouch: false,
+    cooldown: 0,
+    hitFlash: 0,
+    score: 0
+  };
+}
+
+let p1 = makePlayer(150, '#ff5252', 1);
+let p2 = makePlayer(720, '#448aff', -1);
+let bullets = [];
+let keys = {};
+let roundOver = false;
+let botMode = false;
+let started = false;
+
+document.getElementById('botModeBtn').onclick = () => startGame(true);
+document.getElementById('pvpModeBtn').onclick = () => startGame(false);
+
+function startGame(isBot) {
+  botMode = isBot;
+  document.getElementById('modeScreen').style.display = 'none';
+  document.getElementById('gameArea').style.display = 'flex';
+  document.getElementById('p2info').innerHTML = botMode
+    ? '<b>Player 2:</b> Bot (CPU controlled)'
+    : '<b>Player 2:</b> \u2190/\u2192 move, \u2191 jump, \u2193 crouch, ENTER shoot';
+  if (!started) { started = true; update(); }
+}
+
+// --- simple bot AI state ---
+let botState = { decisionTimer: 0, moveDir: 0, wantJump: false, wantCrouch: false };
+
+function updateBotAI() {
+  botState.decisionTimer--;
+  const dist = p1.x - p2.x;
+  const absDist = Math.abs(dist);
+
+  if (botState.decisionTimer <= 0) {
+    botState.decisionTimer = 20 + Math.floor(Math.random() * 20);
+    // decide movement: keep mid-range distance
+    if (absDist > 350) {
+      botState.moveDir = dist > 0 ? 1 : -1;
+    } else if (absDist < 150) {
+      botState.moveDir = dist > 0 ? -1 : 1;
+    } else {
+      botState.moveDir = Math.random() < 0.3 ? (Math.random() < 0.5 ? 1 : -1) : 0;
+    }
+    botState.wantJump = Math.random() < 0.15 && p2.onGround;
+    botState.wantCrouch = Math.random() < 0.3;
+  }
+
+  p2.vx = 0;
+  if (botState.moveDir === -1) { p2.vx = -4; p2.facing = -1; }
+  if (botState.moveDir === 1) { p2.vx = 4; p2.facing = 1; }
+  p2.facing = dist > 0 ? 1 : -1; // always face player 1
+  if (botState.wantJump && p2.onGround) { p2.vy = -12; p2.onGround = false; botState.wantJump = false; }
+  p2.crouch = botState.wantCrouch && p2.onGround;
+
+  // shoot when roughly aligned and off cooldown
+  if (p2.cooldown === 0 && Math.random() < 0.06) {
+    shoot(p2, p1);
+  }
+}
+
+document.addEventListener('keydown', e => {
+  keys[e.code] = true;
+  if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
+});
+document.addEventListener('keyup', e => keys[e.code] = false);
+
+function shoot(p, other) {
+  if (p.cooldown > 0 || roundOver) return;
+  p.cooldown = 18;
+  bullets.push({
+    x: p.x + (p.facing === 1 ? p.w : 0),
+    y: p.y + (p.crouch ? p.h * 0.7 : p.h * 0.3),
+    vx: 11 * p.facing,
+    owner: p
+  });
+}
+
+function update() {
+  if (!roundOver) {
+    // Player 1 controls
+    p1.vx = 0;
+    if (keys['KeyA']) { p1.vx = -4; p1.facing = -1; }
+    if (keys['KeyD']) { p1.vx = 4; p1.facing = 1; }
+    if (keys['KeyW'] && p1.onGround) { p1.vy = -12; p1.onGround = false; }
+    p1.crouch = !!keys['KeyS'] && p1.onGround;
+    if (keys['Space']) shoot(p1, p2);
+
+    // Player 2 controls (human or bot)
+    if (botMode) {
+      updateBotAI();
+    } else {
+      p2.vx = 0;
+      if (keys['ArrowLeft']) { p2.vx = -4; p2.facing = -1; }
+      if (keys['ArrowRight']) { p2.vx = 4; p2.facing = 1; }
+      if (keys['ArrowUp'] && p2.onGround) { p2.vy = -12; p2.onGround = false; }
+      p2.crouch = !!keys['ArrowDown'] && p2.onGround;
+      if (keys['Enter']) shoot(p2, p1);
+    }
+
+    [p1, p2].forEach(p => {
+      p.x += p.vx;
+      p.vy += GRAVITY;
+      p.y += p.vy;
+      if (p.y + p.h >= GROUND_Y) {
+        p.y = GROUND_Y - p.h;
+        p.vy = 0;
+        p.onGround = true;
+      }
+      p.x = Math.max(0, Math.min(W - p.w, p.x));
+      if (p.cooldown > 0) p.cooldown--;
+      if (p.hitFlash > 0) p.hitFlash--;
+    });
+
+    // prevent overlap
+    if (p1.x < p2.x) {
+      if (p1.x + p1.w > p2.x) { p1.x = p2.x - p1.w; }
+    } else {
+      if (p2.x + p2.w > p1.x) { p2.x = p1.x - p2.w; }
+    }
+
+    // bullets
+    bullets.forEach(b => b.x += b.vx);
+    bullets = bullets.filter(b => {
+      if (b.x < 0 || b.x > W) return false;
+      const target = b.owner === p1 ? p2 : p1;
+      const th = target.crouch ? target.h * 0.6 : target.h;
+      const ty = target.crouch ? target.y + target.h * 0.4 : target.y;
+      if (b.x > target.x && b.x < target.x + target.w &&
+          b.y > ty && b.y < ty + th) {
+        target.health -= 12;
+        target.hitFlash = 8;
+        if (target.health <= 0) {
+          target.health = 0;
+          endRound(b.owner);
+        }
+        return false;
+      }
+      return true;
+    });
+
+    updateHUD();
+  }
+  draw();
+  requestAnimationFrame(update);
+}
+
+function updateHUD() {
+  document.getElementById('p1fill').style.width = p1.health + '%';
+  document.getElementById('p2fill').style.width = p2.health + '%';
+}
+
+function endRound(winner) {
+  roundOver = true;
+  winner.score++;
+  document.getElementById(winner === p1 ? 's1' : 's2').textContent = winner.score;
+  const msg = document.getElementById('msg');
+  msg.style.display = 'block';
+  msg.style.color = winner.color;
+  msg.textContent = (winner === p1 ? 'PLAYER 1' : 'PLAYER 2') + ' WINS!';
+  msg.style.left = (canvas.offsetLeft + W / 2 - msg.offsetWidth / 2) + 'px';
+  document.getElementById('restartBtn').style.display = 'inline-block';
+}
+
+function positionMsg() {
+  const msg = document.getElementById('msg');
+  if (msg.style.display === 'block') {
+    msg.style.left = (W / 2 - msg.offsetWidth / 2) + 'px';
+  }
+}
+
+document.getElementById('restartBtn').onclick = () => {
+  const s1 = p1.score, s2 = p2.score;
+  p1 = makePlayer(150, '#ff5252', 1); p1.score = s1;
+  p2 = makePlayer(720, '#448aff', -1); p2.score = s2;
+  bullets = [];
+  roundOver = false;
+  document.getElementById('msg').style.display = 'none';
+  document.getElementById('restartBtn').style.display = 'none';
+  updateHUD();
+};
+
+function drawPlayer(p) {
+  ctx.save();
+  if (p.hitFlash > 0) ctx.globalAlpha = 0.5;
+  const bodyH = p.crouch ? p.h * 0.6 : p.h;
+  const bodyY = p.crouch ? p.y + p.h * 0.4 : p.y;
+
+  // legs/body
+  ctx.fillStyle = p.color;
+  ctx.fillRect(p.x, bodyY, p.w, bodyH);
+
+  // head
+  ctx.beginPath();
+  ctx.arc(p.x + p.w / 2, bodyY - 8, 10, 0, Math.PI * 2);
+  ctx.fill();
+
+  // gun
+  ctx.fillStyle = '#222';
+  const gunY = bodyY + bodyH * 0.35;
+  if (p.facing === 1) {
+    ctx.fillRect(p.x + p.w, gunY, 18, 6);
+  } else {
+    ctx.fillRect(p.x - 18, gunY, 18, 6);
+  }
+  ctx.restore();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // background
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, '#2b2b45');
+  grad.addColorStop(1, '#3a3a5c');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // ground
+  ctx.fillStyle = '#444460';
+  ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
+  ctx.strokeStyle = '#5a5a80';
+  ctx.beginPath();
+  ctx.moveTo(0, GROUND_Y);
+  ctx.lineTo(W, GROUND_Y);
+  ctx.stroke();
+
+  drawPlayer(p1);
+  drawPlayer(p2);
+
+  // bullets
+  bullets.forEach(b => {
+    ctx.fillStyle = '#ffd54f';
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, 4, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  positionMsg();
+}
+
+updateHUD();
+</script>
+</body>
+</html>
